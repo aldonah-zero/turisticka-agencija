@@ -14,27 +14,27 @@ class Base(DeclarativeBase):
 
 # Definitions of Enumerations
 class TipAranzmana(enum.Enum):
-    KRSTARENJE = "KRSTARENJE"
     CITY_BREAK = "CITY_BREAK"
-    ZIMOVANJE = "ZIMOVANJE"
+    KRSTARENJE = "KRSTARENJE"
     LETOVANJE = "LETOVANJE"
+    ZIMOVANJE = "ZIMOVANJE"
 
 class StatusRacuna(enum.Enum):
-    KASNI = "KASNI"
-    OTKAZAN = "OTKAZAN"
-    IZDAT = "IZDAT"
     PLACEN = "PLACEN"
+    IZDAT = "IZDAT"
+    OTKAZAN = "OTKAZAN"
+    KASNI = "KASNI"
 
 class NacinPlacanja(enum.Enum):
     ONLINE = "ONLINE"
-    GOTOVINA = "GOTOVINA"
     PRENOS = "PRENOS"
+    GOTOVINA = "GOTOVINA"
     KARTICA = "KARTICA"
 
 class StatusRezervacije(enum.Enum):
+    POTVRDJENO = "POTVRDJENO"
     OTKAZANO = "OTKAZANO"
     NA_CEKANJU = "NA_CEKANJU"
-    POTVRDJENO = "POTVRDJENO"
     ZAVRSENO = "ZAVRSENO"
 
 
@@ -69,21 +69,21 @@ class Rezervacija(Base):
     datumRezervacije: Mapped[dt_date] = mapped_column(Date)
     ukupnaCena: Mapped[float] = mapped_column(Float)
     status: Mapped[StatusRezervacije] = mapped_column(Enum(StatusRezervacije))
-    klijent_id: Mapped[int] = mapped_column(ForeignKey("klijent.id"))
     aranzman_id: Mapped[int] = mapped_column(ForeignKey("aranzman.id"))
+    klijent_id: Mapped[int] = mapped_column(ForeignKey("klijent.id"))
 
 class Aranzman(Base):
     __tablename__ = "aranzman"
     id: Mapped[int] = mapped_column(primary_key=True)
+    datumPovratka: Mapped[dt_date] = mapped_column(Date)
+    tip: Mapped[TipAranzmana] = mapped_column(Enum(TipAranzmana))
     naziv: Mapped[str] = mapped_column(String(100))
     cena: Mapped[float] = mapped_column(Float)
     trajanje: Mapped[int] = mapped_column(Integer)
     datumPolaska: Mapped[dt_date] = mapped_column(Date)
-    datumPovratka: Mapped[dt_date] = mapped_column(Date)
-    tip: Mapped[TipAranzmana] = mapped_column(Enum(TipAranzmana))
-    vodic_id: Mapped[int] = mapped_column(ForeignKey("vodic.id"), nullable=True)
     hotel_id: Mapped[int] = mapped_column(ForeignKey("hotel.id"))
     destinacija_id: Mapped[int] = mapped_column(ForeignKey("destinacija.id"))
+    vodic_id: Mapped[int] = mapped_column(ForeignKey("vodic.id"), nullable=True)
 
 class Hotel(Base):
     __tablename__ = "hotel"
@@ -117,15 +117,15 @@ Racun.aranzman_4: Mapped["Aranzman"] = relationship("Aranzman", back_populates="
 Vodic.aranzman_3: Mapped[List["Aranzman"]] = relationship("Aranzman", back_populates="vodic", foreign_keys=[Aranzman.vodic_id])
 
 #--- Relationships of the rezervacija table
-Rezervacija.klijent: Mapped["Klijent"] = relationship("Klijent", back_populates="rezervacija", foreign_keys=[Rezervacija.klijent_id])
 Rezervacija.aranzman: Mapped["Aranzman"] = relationship("Aranzman", back_populates="rezervacija_1", foreign_keys=[Rezervacija.aranzman_id])
+Rezervacija.klijent: Mapped["Klijent"] = relationship("Klijent", back_populates="rezervacija", foreign_keys=[Rezervacija.klijent_id])
 
 #--- Relationships of the aranzman table
-Aranzman.vodic: Mapped["Vodic"] = relationship("Vodic", back_populates="aranzman_3", foreign_keys=[Aranzman.vodic_id])
-Aranzman.racun_1: Mapped[List["Racun"]] = relationship("Racun", back_populates="aranzman_4", foreign_keys=[Racun.aranzman_4_id])
-Aranzman.rezervacija_1: Mapped[List["Rezervacija"]] = relationship("Rezervacija", back_populates="aranzman", foreign_keys=[Rezervacija.aranzman_id])
 Aranzman.hotel: Mapped["Hotel"] = relationship("Hotel", back_populates="aranzman_2", foreign_keys=[Aranzman.hotel_id])
+Aranzman.rezervacija_1: Mapped[List["Rezervacija"]] = relationship("Rezervacija", back_populates="aranzman", foreign_keys=[Rezervacija.aranzman_id])
+Aranzman.racun_1: Mapped[List["Racun"]] = relationship("Racun", back_populates="aranzman_4", foreign_keys=[Racun.aranzman_4_id])
 Aranzman.destinacija: Mapped["Destinacija"] = relationship("Destinacija", back_populates="aranzman_1", foreign_keys=[Aranzman.destinacija_id])
+Aranzman.vodic: Mapped["Vodic"] = relationship("Vodic", back_populates="aranzman_3", foreign_keys=[Aranzman.vodic_id])
 
 #--- Relationships of the hotel table
 Hotel.aranzman_2: Mapped[List["Aranzman"]] = relationship("Aranzman", back_populates="hotel", foreign_keys=[Aranzman.hotel_id])

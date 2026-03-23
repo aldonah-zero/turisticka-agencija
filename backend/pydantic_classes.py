@@ -9,91 +9,91 @@ from pydantic import BaseModel, field_validator
 ############################################
 
 class TipAranzmana(Enum):
-    KRSTARENJE = "KRSTARENJE"
     CITY_BREAK = "CITY_BREAK"
-    ZIMOVANJE = "ZIMOVANJE"
+    KRSTARENJE = "KRSTARENJE"
     LETOVANJE = "LETOVANJE"
+    ZIMOVANJE = "ZIMOVANJE"
 
 class StatusRacuna(Enum):
-    KASNI = "KASNI"
-    OTKAZAN = "OTKAZAN"
-    IZDAT = "IZDAT"
     PLACEN = "PLACEN"
+    IZDAT = "IZDAT"
+    OTKAZAN = "OTKAZAN"
+    KASNI = "KASNI"
 
 class NacinPlacanja(Enum):
     ONLINE = "ONLINE"
-    GOTOVINA = "GOTOVINA"
     PRENOS = "PRENOS"
+    GOTOVINA = "GOTOVINA"
     KARTICA = "KARTICA"
 
 class StatusRezervacije(Enum):
+    POTVRDJENO = "POTVRDJENO"
     OTKAZANO = "OTKAZANO"
     NA_CEKANJU = "NA_CEKANJU"
-    POTVRDJENO = "POTVRDJENO"
     ZAVRSENO = "ZAVRSENO"
 
 ############################################
 # Classes are defined here
 ############################################
 class RacunCreate(BaseModel):
+    pdv: float
+    brojRacuna: str
+    datumDospeca: date
     iznos: float
     ukupno: float
-    datumDospeca: date
-    datumIzdavanja: date
     status: StatusRacuna
-    brojRacuna: str
     nacin_placanja: NacinPlacanja
-    pdv: float
-    klijent_1: int  # N:1 Relationship (mandatory)
-    aranzman_4: int  # N:1 Relationship (mandatory)
+    datumIzdavanja: date
+    aranzman_id: int
+    klijent_id: int
 
 
 class VodicCreate(BaseModel):
     ime: str
     prezime: str
-    jezici: str
     specijalizacija: str
+    jezici: str
 
 
 class RezervacijaCreate(BaseModel):
+    datumRezervacije: date
     status: StatusRezervacije
     ukupnaCena: float
-    datumRezervacije: date
     aranzman: int  # N:1 Relationship (mandatory)
     klijent: int  # N:1 Relationship (mandatory)
 
 
 class AranzmanCreate(BaseModel):
     datumPolaska: date
-    cena: float
     tip: TipAranzmana
-    naziv: str
-    trajanje: int
     datumPovratka: date
+    naziv: str
+    cena: float
+    trajanje: int
     vodic: Optional[int] = None  # N:1 Relationship (optional)
-    hotel: int  # N:1 Relationship (mandatory)
+    rezervacija_id: Optional[List[int]] = None  # 1:N Relationship
     destinacija: int  # N:1 Relationship (mandatory)
-    rezervacija_1: Optional[List[int]] = None  # 1:N Relationship
+    hotel: int  # N:1 Relationship (mandatory)
 
 
 class HotelCreate(BaseModel):
+    zvezdice: str
     adresa: str
     naziv: str
-    zvezdice: str
 
 
 class DestinacijaCreate(BaseModel):
-    naziv: str
     opis: str
+    naziv: str
     zemlja: str
 
 
 class KlijentCreate(BaseModel):
-    telefon: str
-    email: str
     prezime: str
-    datumRodjenja: date
     ime: str
+    email: str
+    telefon: str
+    datumRodjenja: date
     racun: Optional[List[int]] = None  # 1:N Relationship
     rezervacija: Optional[List[int]] = None  # 1:N Relationship
 

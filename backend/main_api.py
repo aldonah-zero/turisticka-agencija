@@ -65,7 +65,7 @@ app = FastAPI(
 # Enable CORS for all origins (for development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or restrict to ["http://localhost:3000"]
+    allow_origins=["http://localhost:3000"],  # Or restrict to ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -289,8 +289,8 @@ def get_all_racun(detailed: bool = False, database: Session = Depends(get_db)) -
     if detailed:
         # Eagerly load all relationships to avoid N+1 queries
         query = database.query(Racun)
-        query = query.options(joinedload(Racun.klijent_1))
         query = query.options(joinedload(Racun.aranzman_4))
+        query = query.options(joinedload(Racun.klijent_1))
         racun_list = query.all()
 
         # Serialize with relationships included
@@ -300,13 +300,6 @@ def get_all_racun(detailed: bool = False, database: Session = Depends(get_db)) -
             item_dict.pop('_sa_instance_state', None)
 
             # Add many-to-one relationships (foreign keys for lookup columns)
-            if racun_item.klijent_1:
-                related_obj = racun_item.klijent_1
-                related_dict = related_obj.__dict__.copy()
-                related_dict.pop('_sa_instance_state', None)
-                item_dict['klijent_1'] = related_dict
-            else:
-                item_dict['klijent_1'] = None
             if racun_item.aranzman_4:
                 related_obj = racun_item.aranzman_4
                 related_dict = related_obj.__dict__.copy()
@@ -314,6 +307,13 @@ def get_all_racun(detailed: bool = False, database: Session = Depends(get_db)) -
                 item_dict['aranzman_4'] = related_dict
             else:
                 item_dict['aranzman_4'] = None
+            if racun_item.klijent_1:
+                related_obj = racun_item.klijent_1
+                related_dict = related_obj.__dict__.copy()
+                related_dict.pop('_sa_instance_state', None)
+                item_dict['klijent_1'] = related_dict
+            else:
+                item_dict['klijent_1'] = None
 
 
             result.append(item_dict)
@@ -371,21 +371,21 @@ async def get_racun(racun_id: int, database: Session = Depends(get_db)) -> Racun
 @app.post("/racun/", response_model=None, tags=["Racun"])
 async def create_racun(racun_data: RacunCreate, database: Session = Depends(get_db)) -> Racun:
 
-    if racun_data.klijent_1 is not None:
-        db_klijent_1 = database.query(Klijent).filter(Klijent.id == racun_data.klijent_1).first()
-        if not db_klijent_1:
-            raise HTTPException(status_code=400, detail="Klijent not found")
-    else:
-        raise HTTPException(status_code=400, detail="Klijent ID is required")
-    if racun_data.aranzman_4 is not None:
-        db_aranzman_4 = database.query(Aranzman).filter(Aranzman.id == racun_data.aranzman_4).first()
+    if racun_data.aranzman_id is not None:
+        db_aranzman_4 = database.query(Aranzman).filter(Aranzman.id == racun_data.aranzman_id).first()
         if not db_aranzman_4:
             raise HTTPException(status_code=400, detail="Aranzman not found")
     else:
         raise HTTPException(status_code=400, detail="Aranzman ID is required")
+    if racun_data.klijent_id is not None:
+        db_klijent_1 = database.query(Klijent).filter(Klijent.id == racun_data.klijent_id).first()
+        if not db_klijent_1:
+            raise HTTPException(status_code=400, detail="Klijent not found")
+    else:
+        raise HTTPException(status_code=400, detail="Klijent ID is required")
 
     db_racun = Racun(
-        iznos=racun_data.iznos,        ukupno=racun_data.ukupno,        datumDospeca=racun_data.datumDospeca,        datumIzdavanja=racun_data.datumIzdavanja,        status=racun_data.status.value,        brojRacuna=racun_data.brojRacuna,        nacin_placanja=racun_data.nacin_placanja.value,        pdv=racun_data.pdv,        klijent_1_id=racun_data.klijent_1,        aranzman_4_id=racun_data.aranzman_4        )
+        pdv=racun_data.pdv,        brojRacuna=racun_data.brojRacuna,        datumDospeca=racun_data.datumDospeca,        iznos=racun_data.iznos,        ukupno=racun_data.ukupno,        status=racun_data.status.value,        nacin_placanja=racun_data.nacin_placanja.value,        datumIzdavanja=racun_data.datumIzdavanja,        aranzman_4_id=racun_data.aranzman_id,        klijent_1_id=racun_data.klijent_id        )
 
     database.add(db_racun)
     database.commit()
@@ -406,13 +406,13 @@ async def bulk_create_racun(items: list[RacunCreate], database: Session = Depend
     for idx, item_data in enumerate(items):
         try:
             # Basic validation for each item
-            if not item_data.klijent_1:
-                raise ValueError("Klijent ID is required")
             if not item_data.aranzman_4:
                 raise ValueError("Aranzman ID is required")
+            if not item_data.klijent_1:
+                raise ValueError("Klijent ID is required")
 
             db_racun = Racun(
-                iznos=item_data.iznos,                ukupno=item_data.ukupno,                datumDospeca=item_data.datumDospeca,                datumIzdavanja=item_data.datumIzdavanja,                status=item_data.status.value,                brojRacuna=item_data.brojRacuna,                nacin_placanja=item_data.nacin_placanja.value,                pdv=item_data.pdv,                klijent_1_id=item_data.klijent_1,                aranzman_4_id=item_data.aranzman_4            )
+                pdv=item_data.pdv,                brojRacuna=item_data.brojRacuna,                datumDospeca=item_data.datumDospeca,                iznos=item_data.iznos,                ukupno=item_data.ukupno,                status=item_data.status.value,                nacin_placanja=item_data.nacin_placanja.value,                datumIzdavanja=item_data.datumIzdavanja,                aranzman_4_id=item_data.aranzman_4,                klijent_1_id=item_data.klijent_1            )
             database.add(db_racun)
             database.flush()  # Get ID without committing
             created_items.append(db_racun.id)
@@ -459,24 +459,24 @@ async def update_racun(racun_id: int, racun_data: RacunCreate, database: Session
     if db_racun is None:
         raise HTTPException(status_code=404, detail="Racun not found")
 
+    setattr(db_racun, 'pdv', racun_data.pdv)
+    setattr(db_racun, 'brojRacuna', racun_data.brojRacuna)
+    setattr(db_racun, 'datumDospeca', racun_data.datumDospeca)
     setattr(db_racun, 'iznos', racun_data.iznos)
     setattr(db_racun, 'ukupno', racun_data.ukupno)
-    setattr(db_racun, 'datumDospeca', racun_data.datumDospeca)
-    setattr(db_racun, 'datumIzdavanja', racun_data.datumIzdavanja)
     setattr(db_racun, 'status', racun_data.status.value)
-    setattr(db_racun, 'brojRacuna', racun_data.brojRacuna)
     setattr(db_racun, 'nacin_placanja', racun_data.nacin_placanja.value)
-    setattr(db_racun, 'pdv', racun_data.pdv)
-    if racun_data.klijent_1 is not None:
-        db_klijent_1 = database.query(Klijent).filter(Klijent.id == racun_data.klijent_1).first()
-        if not db_klijent_1:
-            raise HTTPException(status_code=400, detail="Klijent not found")
-        setattr(db_racun, 'klijent_1_id', racun_data.klijent_1)
-    if racun_data.aranzman_4 is not None:
-        db_aranzman_4 = database.query(Aranzman).filter(Aranzman.id == racun_data.aranzman_4).first()
+    setattr(db_racun, 'datumIzdavanja', racun_data.datumIzdavanja)
+    if racun_data.aranzman_id is not None:
+        db_aranzman_4 = database.query(Aranzman).filter(Aranzman.id == racun_data.aranzman_id).first()
         if not db_aranzman_4:
             raise HTTPException(status_code=400, detail="Aranzman not found")
-        setattr(db_racun, 'aranzman_4_id', racun_data.aranzman_4)
+        setattr(db_racun, 'aranzman_4_id', racun_data.aranzman_id)
+    if racun_data.klijent_id is not None:
+        db_klijent_1 = database.query(Klijent).filter(Klijent.id == racun_data.klijent_id).first()
+        if not db_klijent_1:
+            raise HTTPException(status_code=400, detail="Klijent not found")
+        setattr(db_racun, 'klijent_1_id', racun_data.klijent_id)
     database.commit()
     database.refresh(db_racun)
 
@@ -559,7 +559,7 @@ async def create_vodic(vodic_data: VodicCreate, database: Session = Depends(get_
 
 
     db_vodic = Vodic(
-        ime=vodic_data.ime,        prezime=vodic_data.prezime,        jezici=vodic_data.jezici,        specijalizacija=vodic_data.specijalizacija        )
+        ime=vodic_data.ime,        prezime=vodic_data.prezime,        specijalizacija=vodic_data.specijalizacija,        jezici=vodic_data.jezici        )
 
     database.add(db_vodic)
     database.commit()
@@ -582,7 +582,7 @@ async def bulk_create_vodic(items: list[VodicCreate], database: Session = Depend
             # Basic validation for each item
 
             db_vodic = Vodic(
-                ime=item_data.ime,                prezime=item_data.prezime,                jezici=item_data.jezici,                specijalizacija=item_data.specijalizacija            )
+                ime=item_data.ime,                prezime=item_data.prezime,                specijalizacija=item_data.specijalizacija,                jezici=item_data.jezici            )
             database.add(db_vodic)
             database.flush()  # Get ID without committing
             created_items.append(db_vodic.id)
@@ -631,8 +631,8 @@ async def update_vodic(vodic_id: int, vodic_data: VodicCreate, database: Session
 
     setattr(db_vodic, 'ime', vodic_data.ime)
     setattr(db_vodic, 'prezime', vodic_data.prezime)
-    setattr(db_vodic, 'jezici', vodic_data.jezici)
     setattr(db_vodic, 'specijalizacija', vodic_data.specijalizacija)
+    setattr(db_vodic, 'jezici', vodic_data.jezici)
     database.commit()
     database.refresh(db_vodic)
 
@@ -762,7 +762,7 @@ async def create_rezervacija(rezervacija_data: RezervacijaCreate, database: Sess
         raise HTTPException(status_code=400, detail="Klijent ID is required")
 
     db_rezervacija = Rezervacija(
-        status=rezervacija_data.status.value,        ukupnaCena=rezervacija_data.ukupnaCena,        datumRezervacije=rezervacija_data.datumRezervacije,        aranzman_id=rezervacija_data.aranzman,        klijent_id=rezervacija_data.klijent        )
+        datumRezervacije=rezervacija_data.datumRezervacije,        status=rezervacija_data.status.value,        ukupnaCena=rezervacija_data.ukupnaCena,        aranzman_id=rezervacija_data.aranzman,        klijent_id=rezervacija_data.klijent        )
 
     database.add(db_rezervacija)
     database.commit()
@@ -789,7 +789,7 @@ async def bulk_create_rezervacija(items: list[RezervacijaCreate], database: Sess
                 raise ValueError("Klijent ID is required")
 
             db_rezervacija = Rezervacija(
-                status=item_data.status.value,                ukupnaCena=item_data.ukupnaCena,                datumRezervacije=item_data.datumRezervacije,                aranzman_id=item_data.aranzman,                klijent_id=item_data.klijent            )
+                datumRezervacije=item_data.datumRezervacije,                status=item_data.status.value,                ukupnaCena=item_data.ukupnaCena,                aranzman_id=item_data.aranzman,                klijent_id=item_data.klijent            )
             database.add(db_rezervacija)
             database.flush()  # Get ID without committing
             created_items.append(db_rezervacija.id)
@@ -836,9 +836,9 @@ async def update_rezervacija(rezervacija_id: int, rezervacija_data: RezervacijaC
     if db_rezervacija is None:
         raise HTTPException(status_code=404, detail="Rezervacija not found")
 
+    setattr(db_rezervacija, 'datumRezervacije', rezervacija_data.datumRezervacije)
     setattr(db_rezervacija, 'status', rezervacija_data.status.value)
     setattr(db_rezervacija, 'ukupnaCena', rezervacija_data.ukupnaCena)
-    setattr(db_rezervacija, 'datumRezervacije', rezervacija_data.datumRezervacije)
     if rezervacija_data.aranzman is not None:
         db_aranzman = database.query(Aranzman).filter(Aranzman.id == rezervacija_data.aranzman).first()
         if not db_aranzman:
@@ -883,8 +883,8 @@ def get_all_aranzman(detailed: bool = False, database: Session = Depends(get_db)
         # Eagerly load all relationships to avoid N+1 queries
         query = database.query(Aranzman)
         query = query.options(joinedload(Aranzman.vodic))
-        query = query.options(joinedload(Aranzman.hotel))
         query = query.options(joinedload(Aranzman.destinacija))
+        query = query.options(joinedload(Aranzman.hotel))
         aranzman_list = query.all()
 
         # Serialize with relationships included
@@ -901,13 +901,6 @@ def get_all_aranzman(detailed: bool = False, database: Session = Depends(get_db)
                 item_dict['vodic'] = related_dict
             else:
                 item_dict['vodic'] = None
-            if aranzman_item.hotel:
-                related_obj = aranzman_item.hotel
-                related_dict = related_obj.__dict__.copy()
-                related_dict.pop('_sa_instance_state', None)
-                item_dict['hotel'] = related_dict
-            else:
-                item_dict['hotel'] = None
             if aranzman_item.destinacija:
                 related_obj = aranzman_item.destinacija
                 related_dict = related_obj.__dict__.copy()
@@ -915,14 +908,21 @@ def get_all_aranzman(detailed: bool = False, database: Session = Depends(get_db)
                 item_dict['destinacija'] = related_dict
             else:
                 item_dict['destinacija'] = None
+            if aranzman_item.hotel:
+                related_obj = aranzman_item.hotel
+                related_dict = related_obj.__dict__.copy()
+                related_dict.pop('_sa_instance_state', None)
+                item_dict['hotel'] = related_dict
+            else:
+                item_dict['hotel'] = None
 
             # Add many-to-many and one-to-many relationship objects (full details)
             rezervacija_list = database.query(Rezervacija).filter(Rezervacija.aranzman_id == aranzman_item.id).all()
-            item_dict['rezervacija_1'] = []
+            item_dict['rezervacija_id'] = []
             for rezervacija_obj in rezervacija_list:
                 rezervacija_dict = rezervacija_obj.__dict__.copy()
                 rezervacija_dict.pop('_sa_instance_state', None)
-                item_dict['rezervacija_1'].append(rezervacija_dict)
+                item_dict['rezervacija_id'].append(rezervacija_dict)
 
             result.append(item_dict)
         return result
@@ -955,10 +955,10 @@ def get_paginated_aranzman(skip: int = 0, limit: int = 100, detailed: bool = Fal
 
     result = []
     for aranzman_item in aranzman_list:
-        rezervacija_1_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == aranzman_item.id).all()
+        rezervacija_id_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == aranzman_item.id).all()
         item_data = {
             "aranzman": aranzman_item,
-            "rezervacija_1_ids": [x[0] for x in rezervacija_1_ids]        }
+            "rezervacija_id_ids": [x[0] for x in rezervacija_id_ids]        }
         result.append(item_data)
     return {
         "total": total,
@@ -986,10 +986,10 @@ async def get_aranzman(aranzman_id: int, database: Session = Depends(get_db)) ->
     if db_aranzman is None:
         raise HTTPException(status_code=404, detail="Aranzman not found")
 
-    rezervacija_1_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
+    rezervacija_id_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
     response_data = {
         "aranzman": db_aranzman,
-        "rezervacija_1_ids": [x[0] for x in rezervacija_1_ids]}
+        "rezervacija_id_ids": [x[0] for x in rezervacija_id_ids]}
     return response_data
 
 
@@ -1001,45 +1001,45 @@ async def create_aranzman(aranzman_data: AranzmanCreate, database: Session = Dep
         db_vodic = database.query(Vodic).filter(Vodic.id == aranzman_data.vodic).first()
         if not db_vodic:
             raise HTTPException(status_code=400, detail="Vodic not found")
-    if aranzman_data.hotel is not None:
-        db_hotel = database.query(Hotel).filter(Hotel.id == aranzman_data.hotel).first()
-        if not db_hotel:
-            raise HTTPException(status_code=400, detail="Hotel not found")
-    else:
-        raise HTTPException(status_code=400, detail="Hotel ID is required")
     if aranzman_data.destinacija is not None:
         db_destinacija = database.query(Destinacija).filter(Destinacija.id == aranzman_data.destinacija).first()
         if not db_destinacija:
             raise HTTPException(status_code=400, detail="Destinacija not found")
     else:
         raise HTTPException(status_code=400, detail="Destinacija ID is required")
+    if aranzman_data.hotel is not None:
+        db_hotel = database.query(Hotel).filter(Hotel.id == aranzman_data.hotel).first()
+        if not db_hotel:
+            raise HTTPException(status_code=400, detail="Hotel not found")
+    else:
+        raise HTTPException(status_code=400, detail="Hotel ID is required")
 
     db_aranzman = Aranzman(
-        datumPolaska=aranzman_data.datumPolaska,        cena=aranzman_data.cena,        tip=aranzman_data.tip.value,        naziv=aranzman_data.naziv,        trajanje=aranzman_data.trajanje,        datumPovratka=aranzman_data.datumPovratka,        vodic_id=aranzman_data.vodic,        hotel_id=aranzman_data.hotel,        destinacija_id=aranzman_data.destinacija        )
+        datumPolaska=aranzman_data.datumPolaska,        tip=aranzman_data.tip.value,        datumPovratka=aranzman_data.datumPovratka,        naziv=aranzman_data.naziv,        cena=aranzman_data.cena,        trajanje=aranzman_data.trajanje,        vodic_id=aranzman_data.vodic,        destinacija_id=aranzman_data.destinacija,        hotel_id=aranzman_data.hotel        )
 
     database.add(db_aranzman)
     database.commit()
     database.refresh(db_aranzman)
 
-    if aranzman_data.rezervacija_1:
+    if aranzman_data.rezervacija_id:
         # Validate that all Rezervacija IDs exist
-        for rezervacija_id in aranzman_data.rezervacija_1:
+        for rezervacija_id in aranzman_data.rezervacija_id:
             db_rezervacija = database.query(Rezervacija).filter(Rezervacija.id == rezervacija_id).first()
             if not db_rezervacija:
                 raise HTTPException(status_code=400, detail=f"Rezervacija with id {rezervacija_id} not found")
 
         # Update the related entities with the new foreign key
-        database.query(Rezervacija).filter(Rezervacija.id.in_(aranzman_data.rezervacija_1)).update(
+        database.query(Rezervacija).filter(Rezervacija.id.in_(aranzman_data.rezervacija_id)).update(
             {Rezervacija.aranzman_id: db_aranzman.id}, synchronize_session=False
         )
         database.commit()
 
 
 
-    rezervacija_1_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
+    rezervacija_id_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
     response_data = {
         "aranzman": db_aranzman,
-        "rezervacija_1_ids": [x[0] for x in rezervacija_1_ids]    }
+        "rezervacija_id_ids": [x[0] for x in rezervacija_id_ids]    }
     return response_data
 
 
@@ -1052,13 +1052,13 @@ async def bulk_create_aranzman(items: list[AranzmanCreate], database: Session = 
     for idx, item_data in enumerate(items):
         try:
             # Basic validation for each item
-            if not item_data.hotel:
-                raise ValueError("Hotel ID is required")
             if not item_data.destinacija:
                 raise ValueError("Destinacija ID is required")
+            if not item_data.hotel:
+                raise ValueError("Hotel ID is required")
 
             db_aranzman = Aranzman(
-                datumPolaska=item_data.datumPolaska,                cena=item_data.cena,                tip=item_data.tip.value,                naziv=item_data.naziv,                trajanje=item_data.trajanje,                datumPovratka=item_data.datumPovratka,                vodic_id=item_data.vodic,                hotel_id=item_data.hotel,                destinacija_id=item_data.destinacija            )
+                datumPolaska=item_data.datumPolaska,                tip=item_data.tip.value,                datumPovratka=item_data.datumPovratka,                naziv=item_data.naziv,                cena=item_data.cena,                trajanje=item_data.trajanje,                vodic_id=item_data.vodic,                destinacija_id=item_data.destinacija,                hotel_id=item_data.hotel            )
             database.add(db_aranzman)
             database.flush()  # Get ID without committing
             created_items.append(db_aranzman.id)
@@ -1106,11 +1106,11 @@ async def update_aranzman(aranzman_id: int, aranzman_data: AranzmanCreate, datab
         raise HTTPException(status_code=404, detail="Aranzman not found")
 
     setattr(db_aranzman, 'datumPolaska', aranzman_data.datumPolaska)
-    setattr(db_aranzman, 'cena', aranzman_data.cena)
     setattr(db_aranzman, 'tip', aranzman_data.tip.value)
-    setattr(db_aranzman, 'naziv', aranzman_data.naziv)
-    setattr(db_aranzman, 'trajanje', aranzman_data.trajanje)
     setattr(db_aranzman, 'datumPovratka', aranzman_data.datumPovratka)
+    setattr(db_aranzman, 'naziv', aranzman_data.naziv)
+    setattr(db_aranzman, 'cena', aranzman_data.cena)
+    setattr(db_aranzman, 'trajanje', aranzman_data.trajanje)
     if aranzman_data.vodic is not None:
         db_vodic = database.query(Vodic).filter(Vodic.id == aranzman_data.vodic).first()
         if not db_vodic:
@@ -1118,41 +1118,41 @@ async def update_aranzman(aranzman_id: int, aranzman_data: AranzmanCreate, datab
         setattr(db_aranzman, 'vodic_id', aranzman_data.vodic)
     else:
         setattr(db_aranzman, 'vodic_id', None)
-    if aranzman_data.hotel is not None:
-        db_hotel = database.query(Hotel).filter(Hotel.id == aranzman_data.hotel).first()
-        if not db_hotel:
-            raise HTTPException(status_code=400, detail="Hotel not found")
-        setattr(db_aranzman, 'hotel_id', aranzman_data.hotel)
     if aranzman_data.destinacija is not None:
         db_destinacija = database.query(Destinacija).filter(Destinacija.id == aranzman_data.destinacija).first()
         if not db_destinacija:
             raise HTTPException(status_code=400, detail="Destinacija not found")
         setattr(db_aranzman, 'destinacija_id', aranzman_data.destinacija)
-    if aranzman_data.rezervacija_1 is not None:
+    if aranzman_data.hotel is not None:
+        db_hotel = database.query(Hotel).filter(Hotel.id == aranzman_data.hotel).first()
+        if not db_hotel:
+            raise HTTPException(status_code=400, detail="Hotel not found")
+        setattr(db_aranzman, 'hotel_id', aranzman_data.hotel)
+    if aranzman_data.rezervacija_id is not None:
         # Clear all existing relationships (set foreign key to NULL)
         database.query(Rezervacija).filter(Rezervacija.aranzman_id == db_aranzman.id).update(
             {Rezervacija.aranzman_id: None}, synchronize_session=False
         )
 
         # Set new relationships if list is not empty
-        if aranzman_data.rezervacija_1:
+        if aranzman_data.rezervacija_id:
             # Validate that all IDs exist
-            for rezervacija_id in aranzman_data.rezervacija_1:
+            for rezervacija_id in aranzman_data.rezervacija_id:
                 db_rezervacija = database.query(Rezervacija).filter(Rezervacija.id == rezervacija_id).first()
                 if not db_rezervacija:
                     raise HTTPException(status_code=400, detail=f"Rezervacija with id {rezervacija_id} not found")
 
             # Update the related entities with the new foreign key
-            database.query(Rezervacija).filter(Rezervacija.id.in_(aranzman_data.rezervacija_1)).update(
+            database.query(Rezervacija).filter(Rezervacija.id.in_(aranzman_data.rezervacija_id)).update(
                 {Rezervacija.aranzman_id: db_aranzman.id}, synchronize_session=False
             )
     database.commit()
     database.refresh(db_aranzman)
 
-    rezervacija_1_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
+    rezervacija_id_ids = database.query(Rezervacija.id).filter(Rezervacija.aranzman_id == db_aranzman.id).all()
     response_data = {
         "aranzman": db_aranzman,
-        "rezervacija_1_ids": [x[0] for x in rezervacija_1_ids]    }
+        "rezervacija_id_ids": [x[0] for x in rezervacija_id_ids]    }
     return response_data
 
 
@@ -1232,7 +1232,7 @@ async def create_hotel(hotel_data: HotelCreate, database: Session = Depends(get_
 
 
     db_hotel = Hotel(
-        adresa=hotel_data.adresa,        naziv=hotel_data.naziv,        zvezdice=hotel_data.zvezdice        )
+        zvezdice=hotel_data.zvezdice,        adresa=hotel_data.adresa,        naziv=hotel_data.naziv        )
 
     database.add(db_hotel)
     database.commit()
@@ -1255,7 +1255,7 @@ async def bulk_create_hotel(items: list[HotelCreate], database: Session = Depend
             # Basic validation for each item
 
             db_hotel = Hotel(
-                adresa=item_data.adresa,                naziv=item_data.naziv,                zvezdice=item_data.zvezdice            )
+                zvezdice=item_data.zvezdice,                adresa=item_data.adresa,                naziv=item_data.naziv            )
             database.add(db_hotel)
             database.flush()  # Get ID without committing
             created_items.append(db_hotel.id)
@@ -1302,9 +1302,9 @@ async def update_hotel(hotel_id: int, hotel_data: HotelCreate, database: Session
     if db_hotel is None:
         raise HTTPException(status_code=404, detail="Hotel not found")
 
+    setattr(db_hotel, 'zvezdice', hotel_data.zvezdice)
     setattr(db_hotel, 'adresa', hotel_data.adresa)
     setattr(db_hotel, 'naziv', hotel_data.naziv)
-    setattr(db_hotel, 'zvezdice', hotel_data.zvezdice)
     database.commit()
     database.refresh(db_hotel)
 
@@ -1387,7 +1387,7 @@ async def create_destinacija(destinacija_data: DestinacijaCreate, database: Sess
 
 
     db_destinacija = Destinacija(
-        naziv=destinacija_data.naziv,        opis=destinacija_data.opis,        zemlja=destinacija_data.zemlja        )
+        opis=destinacija_data.opis,        naziv=destinacija_data.naziv,        zemlja=destinacija_data.zemlja        )
 
     database.add(db_destinacija)
     database.commit()
@@ -1410,7 +1410,7 @@ async def bulk_create_destinacija(items: list[DestinacijaCreate], database: Sess
             # Basic validation for each item
 
             db_destinacija = Destinacija(
-                naziv=item_data.naziv,                opis=item_data.opis,                zemlja=item_data.zemlja            )
+                opis=item_data.opis,                naziv=item_data.naziv,                zemlja=item_data.zemlja            )
             database.add(db_destinacija)
             database.flush()  # Get ID without committing
             created_items.append(db_destinacija.id)
@@ -1457,8 +1457,8 @@ async def update_destinacija(destinacija_id: int, destinacija_data: DestinacijaC
     if db_destinacija is None:
         raise HTTPException(status_code=404, detail="Destinacija not found")
 
-    setattr(db_destinacija, 'naziv', destinacija_data.naziv)
     setattr(db_destinacija, 'opis', destinacija_data.opis)
+    setattr(db_destinacija, 'naziv', destinacija_data.naziv)
     setattr(db_destinacija, 'zemlja', destinacija_data.zemlja)
     database.commit()
     database.refresh(db_destinacija)
@@ -1594,7 +1594,7 @@ async def create_klijent(klijent_data: KlijentCreate, database: Session = Depend
 
 
     db_klijent = Klijent(
-        telefon=klijent_data.telefon,        email=klijent_data.email,        prezime=klijent_data.prezime,        datumRodjenja=klijent_data.datumRodjenja,        ime=klijent_data.ime        )
+        prezime=klijent_data.prezime,        ime=klijent_data.ime,        email=klijent_data.email,        telefon=klijent_data.telefon,        datumRodjenja=klijent_data.datumRodjenja        )
 
     database.add(db_klijent)
     database.commit()
@@ -1646,7 +1646,7 @@ async def bulk_create_klijent(items: list[KlijentCreate], database: Session = De
             # Basic validation for each item
 
             db_klijent = Klijent(
-                telefon=item_data.telefon,                email=item_data.email,                prezime=item_data.prezime,                datumRodjenja=item_data.datumRodjenja,                ime=item_data.ime            )
+                prezime=item_data.prezime,                ime=item_data.ime,                email=item_data.email,                telefon=item_data.telefon,                datumRodjenja=item_data.datumRodjenja            )
             database.add(db_klijent)
             database.flush()  # Get ID without committing
             created_items.append(db_klijent.id)
@@ -1693,11 +1693,11 @@ async def update_klijent(klijent_id: int, klijent_data: KlijentCreate, database:
     if db_klijent is None:
         raise HTTPException(status_code=404, detail="Klijent not found")
 
-    setattr(db_klijent, 'telefon', klijent_data.telefon)
-    setattr(db_klijent, 'email', klijent_data.email)
     setattr(db_klijent, 'prezime', klijent_data.prezime)
-    setattr(db_klijent, 'datumRodjenja', klijent_data.datumRodjenja)
     setattr(db_klijent, 'ime', klijent_data.ime)
+    setattr(db_klijent, 'email', klijent_data.email)
+    setattr(db_klijent, 'telefon', klijent_data.telefon)
+    setattr(db_klijent, 'datumRodjenja', klijent_data.datumRodjenja)
     if klijent_data.racun is not None:
         # Clear all existing relationships (set foreign key to NULL)
         database.query(Racun).filter(Racun.klijent_1_id == db_klijent.id).update(
