@@ -5,18 +5,14 @@ Pokretanje: python seed.py (iz backend_output foldera, sa aktivnim venv)
 
 import requests
 import json
+import os
 
 """
 Skripta za punjenje baze podataka turističke agencije ADRIATICA
 Pokretanje: python seed.py (iz backend_output foldera, sa aktivnim venv)
 """
 
-import os
-
-BASE = os.getenv("BASE_URL")
-
-if not BASE:
-    raise Exception("BASE_URL is not set")
+BASE = os.getenv("SEED_BASE_URL", f"http://localhost:{os.getenv('PORT', '8000')}")
 
 print(f"🌐 Using BASE: {BASE}")
 
@@ -24,7 +20,6 @@ def post(endpoint, data):
     r = requests.post(f"{BASE}/{endpoint}/", json=data)
     if r.status_code in (200, 201):
         result = r.json()
-        # BESSER wraps single objects
         if isinstance(result, dict) and endpoint in result:
             return result[endpoint]
         return result
@@ -110,6 +105,13 @@ aranzmani_data = [
 
 aranzman_ids = []
 for a in aranzmani_data:
+    dest_id = dest_ids.get(a["dest"])
+    hotel_id = hotel_ids.get(a["hotel"])
+
+    if not dest_id or not hotel_id:
+        print(f"❌ Missing IDs for {a['naziv']} | dest={dest_id}, hotel={hotel_id}")
+        continue
+
     payload = {
         "naziv": a["naziv"],
         "cena": a["cena"],
@@ -117,17 +119,18 @@ for a in aranzmani_data:
         "datumPolaska": a["datumPolaska"],
         "datumPovratka": a["datumPovratka"],
         "tip": a["tip"],
-        "destinacija": dest_ids.get(a["dest"]),
-        "hotel": hotel_ids.get(a["hotel"]),
+        "destinacija": dest_id,
+        "hotel": hotel_id,
         "vodic": vodic_ids.get(a["vodic"]) if a["vodic"] else None,
     }
+
     r = post("aranzman", payload)
+
     if r:
         aid = r.get("id") or r.get("aranzman", {}).get("id")
         if aid:
             aranzman_ids.append(aid)
             print(f"  ✓ {a['naziv']} ({a['tip']}) — {a['cena']:,} RSD → ID {aid}")
-
 print("\n👥 KLIJENTI")
 klijenti_data = [
     {"ime": "Petar",    "prezime": "Kovačević", "email": "petar.kovacevic@gmail.com",  "telefon": "+381 60 123 4567", "datumRodjenja": "1985-03-15"},
