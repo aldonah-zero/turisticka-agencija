@@ -11,7 +11,14 @@ Skripta za punjenje baze podataka turističke agencije ADRIATICA
 Pokretanje: python seed.py (iz backend_output foldera, sa aktivnim venv)
 """
 
-BASE = "http://localhost:8000"
+import os
+
+BASE = os.getenv("BASE_URL")
+
+if not BASE:
+    raise Exception("BASE_URL is not set")
+
+print(f"🌐 Using BASE: {BASE}")
 
 def post(endpoint, data):
     r = requests.post(f"{BASE}/{endpoint}/", json=data)
