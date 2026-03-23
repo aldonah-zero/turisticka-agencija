@@ -1,0 +1,30 @@
+import React from "react";
+import { TableBlock } from "../components/runtime/TableBlock";
+
+const Aranzman: React.FC = () => {
+  return (
+    <div id="page-aranzman-3">
+    <div id="ick2sz" style={{"display": "flex", "height": "100vh", "fontFamily": "Arial, sans-serif", "--chart-color-palette": "default"}}>
+      <nav id="i2n7mc" style={{"width": "250px", "background": "linear-gradient(135deg, #4b3c82 0%, #5a3d91 100%)", "color": "white", "padding": "20px", "overflowY": "auto", "display": "flex", "flexDirection": "column", "--chart-color-palette": "default"}}>
+        <h2 id="inyjjc" style={{"marginTop": "0", "fontSize": "24px", "marginBottom": "30px", "fontWeight": "bold", "--chart-color-palette": "default"}}>{"BESSER"}</h2>
+        <div id="idnyjy" style={{"display": "flex", "flexDirection": "column", "flex": "1", "--chart-color-palette": "default"}}>
+          <a id="i6n47j" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/klijent">{"Klijent"}</a>
+          <a id="i8luyl" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/destinacija">{"Destinacija"}</a>
+          <a id="iy51el" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/hotel">{"Hotel"}</a>
+          <a id="i2mpyl" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "rgba(255,255,255,0.2)", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/aranzman">{"Aranzman"}</a>
+          <a id="ic6geg" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/rezervacija">{"Rezervacija"}</a>
+          <a id="iamr1k" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/vodic">{"Vodic"}</a>
+          <a id="it0vzk" style={{"color": "white", "textDecoration": "none", "padding": "10px 15px", "display": "block", "background": "transparent", "borderRadius": "4px", "marginBottom": "5px", "--chart-color-palette": "default"}} href="/racun">{"Racun"}</a>
+        </div>
+        <p id="iatpmh" style={{"marginTop": "auto", "paddingTop": "20px", "borderTop": "1px solid rgba(255,255,255,0.2)", "fontSize": "11px", "opacity": "0.8", "textAlign": "center", "--chart-color-palette": "default"}}>{"© 2026 BESSER. All rights reserved."}</p>
+      </nav>
+      <main id="iaouw3" style={{"flex": "1", "padding": "40px", "overflowY": "auto", "background": "#f5f5f5", "--chart-color-palette": "default"}}>
+        <h1 id="i0yn1w" style={{"marginTop": "0", "color": "#333", "fontSize": "32px", "marginBottom": "10px", "--chart-color-palette": "default"}}>{"Aranzman"}</h1>
+        <p id="i9ueck" style={{"color": "#666", "marginBottom": "30px", "--chart-color-palette": "default"}}>{"Manage Aranzman data"}</p>
+        <TableBlock id="table-aranzman-3" styles={{"width": "auto", "height": "auto", "padding": "0", "margin": "0", "position": "static", "textAlign": "left", "zIndex": 0, "backgroundColor": "#2c3e50", "--chart-color-palette": "default"}} title="Aranzman List" options={{"showHeader": true, "stripedRows": false, "showPagination": true, "rowsPerPage": 5, "actionButtons": true, "columns": [{"label": "Naziv", "column_type": "field", "field": "naziv", "type": "str", "required": true}, {"label": "Cena", "column_type": "field", "field": "cena", "type": "float", "required": true}, {"label": "Trajanje", "column_type": "field", "field": "trajanje", "type": "int", "required": true}, {"label": "DatumPolaska", "column_type": "field", "field": "datumPolaska", "type": "date", "required": true}, {"label": "DatumPovratka", "column_type": "field", "field": "datumPovratka", "type": "date", "required": true}, {"label": "Tip", "column_type": "field", "field": "tip", "type": "enum", "options": ["CITY_BREAK", "KRSTARENJE", "LETOVANJE", "ZIMOVANJE"], "required": true}], "formColumns": [{"column_type": "field", "field": "naziv", "label": "naziv", "type": "str", "required": true, "defaultValue": null}, {"column_type": "field", "field": "cena", "label": "cena", "type": "float", "required": true, "defaultValue": null}, {"column_type": "field", "field": "trajanje", "label": "trajanje", "type": "int", "required": true, "defaultValue": null}, {"column_type": "field", "field": "datumPolaska", "label": "datumPolaska", "type": "date", "required": true, "defaultValue": null}, {"column_type": "field", "field": "datumPovratka", "label": "datumPovratka", "type": "date", "required": true, "defaultValue": null}, {"column_type": "field", "field": "tip", "label": "tip", "type": "enum", "required": true, "defaultValue": null, "options": ["CITY_BREAK", "KRSTARENJE", "LETOVANJE", "ZIMOVANJE"]}, {"column_type": "lookup", "path": "rezervacija_1", "field": "rezervacija_1", "lookup_field": "datumRezervacije", "entity": "Rezervacija", "type": "list", "required": false}, {"column_type": "lookup", "path": "destinacija", "field": "destinacija", "lookup_field": "naziv", "entity": "Destinacija", "type": "str", "required": true}, {"column_type": "lookup", "path": "hotel", "field": "hotel", "lookup_field": "naziv", "entity": "Hotel", "type": "str", "required": true}, {"column_type": "lookup", "path": "vodic", "field": "vodic", "lookup_field": "ime", "entity": "Vodic", "type": "str", "required": false}]}} dataBinding={{"entity": "Aranzman", "endpoint": "/aranzman/"}} />
+      </main>
+    </div>    </div>
+  );
+};
+
+export default Aranzman;
