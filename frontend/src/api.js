@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000";
-
+const BASE_URL = "https://turisticka-agencija-backend-70dd23.onrender.com";
 const api = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
