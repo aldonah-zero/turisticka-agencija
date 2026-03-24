@@ -169,7 +169,7 @@
   margin-top: 2px;
 }
 
-/* ── MOBILE ── */
+/* ── MOBILE TOPBAR ── */
 .mob-bar {
   display: none;
   position: fixed;
@@ -183,6 +183,7 @@
   padding: 0 18px;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .mob-logo {
@@ -207,7 +208,12 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.mob-toggle:hover {
+  background: #f4f5fb;
 }
 .mob-toggle span {
   display: block;
@@ -215,18 +221,43 @@
   height: 2px;
   background: var(--ink);
   border-radius: 2px;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center;
 }
 
+/* Hamburger → X animation */
+.mob-toggle span.x:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.mob-toggle span.x:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mob-toggle span.x:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── OVERLAY ── */
 .sb-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.35);
   z-index: 199;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
+  animation: overlayIn 0.2s ease;
 }
 
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .mob-bar {
     display: flex;
@@ -237,8 +268,20 @@
   .sidebar {
     transform: translateX(-100%);
     top: 56px;
+    box-shadow: none;
   }
   .sidebar.open {
     transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* ── DESKTOP: push main content ── */
+@media (min-width: 769px) {
+  .mob-bar {
+    display: none;
+  }
+  .sb-overlay {
+    display: none !important;
   }
 }

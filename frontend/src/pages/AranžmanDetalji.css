@@ -9,7 +9,7 @@
 .detalji-hero {
   position: relative;
   height: 70vh;
-  min-height: 480px;
+  min-height: 420px;
   overflow: hidden;
 }
 
@@ -32,6 +32,7 @@
     rgba(2, 4, 22, 0.55) 65%,
     rgba(2, 4, 22, 0.92) 100%
   );
+  animation: fadeIn 0.6s ease both;
 }
 
 .detalji-hero-content {
@@ -39,7 +40,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0 0 48px;
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 48px 52px;
@@ -58,8 +58,8 @@
   margin-bottom: 20px;
   font-family: "Outfit", sans-serif;
   transition: color 0.2s;
+  animation: fadeUp 0.5s ease 0.1s both;
 }
-
 .back-link:hover {
   color: #f5c842;
 }
@@ -75,8 +75,8 @@
   color: #f5c842;
   margin-bottom: 12px;
   font-family: "Outfit", sans-serif;
+  animation: fadeUp 0.5s ease 0.2s both;
 }
-
 .detalji-eyebrow::before {
   content: "";
   width: 18px;
@@ -87,12 +87,13 @@
 
 .detalji-title {
   font-family: "Khand", sans-serif;
-  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-size: clamp(1.8rem, 4.5vw, 3.8rem);
   font-weight: 700;
   color: #fff;
   margin-bottom: 20px;
   line-height: 1.04;
   letter-spacing: -0.01em;
+  animation: fadeUp 0.6s ease 0.3s both;
 }
 
 .detalji-hero-meta {
@@ -100,6 +101,7 @@
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
+  animation: fadeUp 0.5s ease 0.44s both;
 }
 
 .meta-pill {
@@ -144,7 +146,17 @@
 
 /* ── SECTIONS ── */
 .detalji-section {
-  margin-bottom: 36px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.5s ease both;
+}
+.detalji-main .detalji-section:nth-child(1) {
+  animation-delay: 0.15s;
+}
+.detalji-main .detalji-section:nth-child(2) {
+  animation-delay: 0.25s;
+}
+.detalji-main .detalji-section:nth-child(3) {
+  animation-delay: 0.35s;
 }
 
 .detalji-section-title {
@@ -158,7 +170,6 @@
   align-items: center;
   gap: 10px;
 }
-
 .detalji-section-title::after {
   content: "";
   flex: 1;
@@ -168,29 +179,32 @@
 }
 
 /* ── DEST CARD ── */
-.dest-card {
+.dest-card,
+.hotel-card,
+.vodic-card {
   background: #fff;
   border: 1.5px solid #eaedf5;
   border-radius: 18px;
-  padding: 28px;
+  padding: 24px;
   box-shadow: 0 2px 12px rgba(10, 13, 26, 0.05);
   transition: box-shadow 0.2s;
 }
-
-.dest-card:hover {
+.dest-card:hover,
+.hotel-card:hover,
+.vodic-card:hover {
   box-shadow: 0 8px 24px rgba(10, 13, 26, 0.08);
 }
 
 .dest-card-header {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
   margin-bottom: 14px;
 }
 
 .dest-icon-wrap {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 14px;
   background: #eef2ff;
   border: 1.5px solid #c7d2fe;
@@ -203,15 +217,14 @@
 
 .dest-card-header h3 {
   font-family: "Khand", sans-serif;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   color: #0a0d1a;
   margin-bottom: 3px;
   letter-spacing: -0.01em;
 }
-
 .dest-card-header p {
-  font-size: 12px;
+  font-size: 11px;
   color: #9ca3b8;
   font-weight: 600;
   text-transform: uppercase;
@@ -228,45 +241,31 @@
   border-top: 1px solid #f4f5fb;
 }
 
-/* ── HOTEL CARD ── */
 .hotel-card {
-  background: #fff;
-  border: 1.5px solid #eaedf5;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow: 0 2px 12px rgba(10, 13, 26, 0.05);
-  transition: box-shadow 0.2s;
+  padding: 24px;
 }
-
-.hotel-card:hover {
-  box-shadow: 0 8px 24px rgba(10, 13, 26, 0.08);
-}
-
 .hotel-stars {
   display: flex;
   gap: 3px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
-
 .hotel-star {
   color: #f5c842;
-  font-size: 16px;
+  font-size: 15px;
 }
-
 .hotel-name {
   font-family: "Khand", sans-serif;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: #0a0d1a;
   letter-spacing: -0.01em;
   margin-bottom: 8px;
 }
-
 .hotel-adresa {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: #9ca3b8;
   font-family: "Outfit", sans-serif;
   background: #f4f5fb;
@@ -275,26 +274,14 @@
   border: 1px solid #eaedf5;
 }
 
-/* ── VODIC CARD ── */
 .vodic-card {
-  background: #fff;
-  border: 1.5px solid #eaedf5;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow: 0 2px 12px rgba(10, 13, 26, 0.05);
   display: flex;
-  gap: 20px;
+  gap: 18px;
   align-items: center;
-  transition: box-shadow 0.2s;
 }
-
-.vodic-card:hover {
-  box-shadow: 0 8px 24px rgba(10, 13, 26, 0.08);
-}
-
 .vodic-avatar {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: linear-gradient(135deg, #0040ff, #1a56ff);
   color: #fff;
@@ -302,22 +289,20 @@
   align-items: center;
   justify-content: center;
   font-family: "Khand", sans-serif;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   flex-shrink: 0;
   box-shadow: 0 6px 18px rgba(0, 64, 255, 0.28);
   letter-spacing: 0.02em;
 }
-
 .vodic-info h3 {
   font-family: "Khand", sans-serif;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   color: #0a0d1a;
   letter-spacing: -0.01em;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
-
 .vodic-tag {
   display: inline-flex;
   align-items: center;
@@ -335,11 +320,15 @@
 }
 
 /* ── BOOKING WIDGET ── */
+.detalji-sidebar {
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
 .booking-widget {
   background: linear-gradient(160deg, #040915 0%, #050d22 60%, #071228 100%);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 22px;
-  padding: 32px;
+  padding: 28px;
   position: sticky;
   top: 24px;
   box-shadow: 0 24px 56px rgba(0, 0, 0, 0.22);
@@ -357,7 +346,6 @@
   align-items: center;
   gap: 8px;
 }
-
 .booking-eyebrow::before {
   content: "";
   width: 16px;
@@ -370,29 +358,28 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 28px;
-  padding-bottom: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .booking-price-amount {
   font-family: "Khand", sans-serif;
-  font-size: 3rem;
+  font-size: 2.8rem;
   font-weight: 700;
   color: #fff;
   line-height: 1;
   letter-spacing: -0.03em;
 }
-
 .booking-price-currency {
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
   font-family: "Outfit", sans-serif;
   font-weight: 600;
 }
 
 .booking-details {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -402,21 +389,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 11px 0;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 13px;
   font-family: "Outfit", sans-serif;
 }
-
 .booking-row:last-child {
   border-bottom: none;
 }
-
 .booking-row span {
   color: rgba(255, 255, 255, 0.4);
   font-weight: 500;
 }
-
 .booking-row strong {
   color: #fff;
   font-weight: 700;
@@ -428,7 +412,7 @@
 .booking-btn {
   width: 100%;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   padding: 14px 24px;
   font-size: 16px;
   border-radius: 14px;
@@ -446,7 +430,6 @@
   justify-content: center;
   gap: 5px;
 }
-
 .booking-note::before {
   content: "✓";
   display: inline-flex;
@@ -458,6 +441,26 @@
   border-radius: 50%;
   font-size: 8px;
   color: #4ade80;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ── RESPONSIVE ── */
@@ -475,66 +478,46 @@
     padding: 32px 24px 80px;
   }
   .detalji-hero-content {
-    padding: 0 24px 40px;
+    padding: 0 24px 36px;
   }
 }
 
 @media (max-width: 600px) {
   .detalji-hero {
-    height: 60vh;
+    height: 55vh;
+    min-height: 360px;
   }
   .detalji-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 14px;
   }
-}
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
+  .detalji-body {
+    padding: 24px 16px 60px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .detalji-hero-content {
+    padding: 0 16px 28px;
   }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+  .back-link {
+    margin-bottom: 14px;
   }
-  to {
-    opacity: 1;
+  .booking-widget {
+    padding: 22px 20px;
   }
-}
-
-.detalji-hero-overlay {
-  animation: fadeIn 0.6s ease both;
-}
-
-.detalji-hero-content .back-link {
-  animation: fadeUp 0.5s ease 0.1s both;
-}
-.detalji-hero-content .detalji-eyebrow {
-  animation: fadeUp 0.5s ease 0.2s both;
-}
-.detalji-hero-content .detalji-title {
-  animation: fadeUp 0.6s ease 0.3s both;
-}
-.detalji-hero-content .detalji-hero-meta {
-  animation: fadeUp 0.5s ease 0.44s both;
-}
-
-.detalji-main .detalji-section:nth-child(1) {
-  animation: fadeUp 0.5s ease 0.15s both;
-}
-.detalji-main .detalji-section:nth-child(2) {
-  animation: fadeUp 0.5s ease 0.25s both;
-}
-.detalji-main .detalji-section:nth-child(3) {
-  animation: fadeUp 0.5s ease 0.35s both;
-}
-
-.detalji-sidebar {
-  animation: fadeUp 0.6s ease 0.3s both;
+  .booking-price-amount {
+    font-size: 2.2rem;
+  }
+  .dest-card,
+  .hotel-card,
+  .vodic-card {
+    padding: 18px;
+  }
+  .vodic-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .meta-pill {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
 }

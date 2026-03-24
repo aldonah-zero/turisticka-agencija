@@ -83,6 +83,7 @@ function Card({ a, dest, index }) {
       className={`card-link ${hov ? "card-hov" : ""}`}
       style={{
         display: "flex",
+        flexDirection: "column",
         textDecoration: "none",
         color: "inherit",
         background: "#fff",
@@ -92,7 +93,7 @@ function Card({ a, dest, index }) {
         transition:
           "transform 0.38s cubic-bezier(.22,1,.36,1), box-shadow 0.38s cubic-bezier(.22,1,.36,1), border-color 0.22s",
         transform: hov
-          ? "translateY(-6px) scale(1.005)"
+          ? "translateY(-4px) scale(1.005)"
           : "translateY(0) scale(1)",
         boxShadow: hov
           ? "0 32px 72px rgba(0,40,200,0.11), 0 8px 24px rgba(0,0,0,0.06)"
@@ -104,16 +105,20 @@ function Card({ a, dest, index }) {
       <div
         style={{
           position: "relative",
-          width: 290,
+          width: "100%",
+          paddingTop: "52%",
           flexShrink: 0,
           overflow: "hidden",
         }}
+        className="card-img-wrap"
       >
         <img
           src={img}
           alt={a.naziv}
           loading="lazy"
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
@@ -122,7 +127,6 @@ function Card({ a, dest, index }) {
             transform: hov ? "scale(1.10)" : "scale(1.02)",
           }}
         />
-        {/* gradient overlay */}
         <div
           style={{
             position: "absolute",
@@ -131,8 +135,6 @@ function Card({ a, dest, index }) {
               "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 40%, rgba(0,0,0,0.65) 100%)",
           }}
         />
-
-        {/* tip chip */}
         <div
           style={{
             position: "absolute",
@@ -151,15 +153,13 @@ function Card({ a, dest, index }) {
             alignItems: "center",
             gap: 5,
             border: `1px solid ${tip.bg}`,
-            transition: "transform 0.22s, box-shadow 0.22s",
+            transition: "transform 0.22s",
             transform: hov ? "translateY(-1px)" : "translateY(0)",
           }}
         >
           <span style={{ fontSize: 12 }}>{tip.icon}</span>
           {tip.label}
         </div>
-
-        {/* wishlist */}
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -190,8 +190,6 @@ function Card({ a, dest, index }) {
         >
           {fav ? "♥" : "♡"}
         </button>
-
-        {/* save badge */}
         <div
           style={{
             position: "absolute",
@@ -211,8 +209,6 @@ function Card({ a, dest, index }) {
         >
           -{save}%
         </div>
-
-        {/* duration */}
         <div
           style={{
             position: "absolute",
@@ -237,7 +233,7 @@ function Card({ a, dest, index }) {
       <div
         style={{
           flex: 1,
-          padding: "24px 28px",
+          padding: "20px 22px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -245,7 +241,6 @@ function Card({ a, dest, index }) {
         }}
       >
         <div>
-          {/* Location */}
           <div
             style={{
               fontSize: 10,
@@ -276,15 +271,13 @@ function Card({ a, dest, index }) {
             </span>
             {dest ? `${dest.naziv}, ${dest.zemlja}` : "—"}
           </div>
-
-          {/* Title */}
           <h3
             style={{
               fontFamily: "'Khand',sans-serif",
-              fontSize: 23,
+              fontSize: 21,
               fontWeight: 700,
               color: "#0A0D1A",
-              marginBottom: 14,
+              marginBottom: 12,
               lineHeight: 1.12,
               letterSpacing: "-0.01em",
               transition: "color 0.2s",
@@ -293,9 +286,7 @@ function Card({ a, dest, index }) {
           >
             {a.naziv}
           </h3>
-
-          {/* Tags */}
-          <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {[
               {
                 ico: "🗓",
@@ -312,7 +303,7 @@ function Card({ a, dest, index }) {
                   color: "#6B7394",
                   background: "#F4F5FB",
                   border: "1.5px solid #EAEDF5",
-                  padding: "5px 12px",
+                  padding: "5px 10px",
                   borderRadius: 100,
                   whiteSpace: "nowrap",
                   fontFamily: "'Outfit',sans-serif",
@@ -337,14 +328,13 @@ function Card({ a, dest, index }) {
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            paddingTop: 18,
-            marginTop: 18,
+            paddingTop: 16,
+            marginTop: 16,
             borderTop: "1px solid #EAEDF5",
             gap: 12,
             flexWrap: "wrap",
           }}
         >
-          {/* Price block */}
           <div>
             <span
               style={{
@@ -359,7 +349,7 @@ function Card({ a, dest, index }) {
             <div
               style={{
                 fontFamily: "'Khand',sans-serif",
-                fontSize: 30,
+                fontSize: 28,
                 fontWeight: 700,
                 color: "#0A0D1A",
                 letterSpacing: "-0.03em",
@@ -409,16 +399,14 @@ function Card({ a, dest, index }) {
               UKLJ. SVI POREZI
             </div>
           </div>
-
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 12,
+              gap: 10,
               flexShrink: 0,
             }}
           >
-            {/* Score badge */}
             <div style={{ textAlign: "center" }}>
               <div
                 style={{
@@ -438,7 +426,7 @@ function Card({ a, dest, index }) {
                   fontFamily: "'Khand',sans-serif",
                   letterSpacing: "-0.02em",
                   boxShadow: "0 4px 14px rgba(0,64,255,0.3)",
-                  transition: "transform 0.2s, box-shadow 0.2s",
+                  transition: "transform 0.2s",
                   transform: hov ? "scale(1.05)" : "scale(1)",
                 }}
               >
@@ -460,17 +448,15 @@ function Card({ a, dest, index }) {
                     : "Dobro"}
               </div>
             </div>
-
-            {/* CTA button */}
             <div
               style={{
                 background: hov
                   ? "linear-gradient(135deg, #002CCB, #0040FF)"
                   : "linear-gradient(135deg, #0040FF, #1A56FF)",
                 color: "#fff",
-                padding: "12px 22px",
+                padding: "11px 18px",
                 borderRadius: 14,
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: 700,
                 fontFamily: "'Khand',sans-serif",
                 transition: "all 0.28s cubic-bezier(.22,1,.36,1)",
@@ -485,7 +471,7 @@ function Card({ a, dest, index }) {
                 letterSpacing: "0.02em",
               }}
             >
-              Vidi ponudu
+              Vidi ponudu{" "}
               <span
                 style={{
                   display: "inline-block",
@@ -506,7 +492,6 @@ function Card({ a, dest, index }) {
 function Pagination({ page, total, perPage, onChange }) {
   const pages = Math.ceil(total / perPage);
   if (pages <= 1) return null;
-
   return (
     <div
       style={{
@@ -515,34 +500,28 @@ function Pagination({ page, total, perPage, onChange }) {
         justifyContent: "center",
         gap: 6,
         marginTop: 52,
+        flexWrap: "wrap",
       }}
     >
-      {[
-        { label: "←", disabled: page === 1, onClick: () => onChange(page - 1) },
-      ].map(({ label, disabled, onClick }) => (
-        <button
-          key={label}
-          onClick={onClick}
-          disabled={disabled}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 11,
-            border: `1.5px solid ${disabled ? "#F0F2F8" : "#E0E4F0"}`,
-            background: disabled ? "#F8F9FC" : "#fff",
-            color: disabled ? "#CBD5E1" : "#4B5168",
-            fontSize: 15,
-            fontWeight: 700,
-            cursor: disabled ? "not-allowed" : "pointer",
-            fontFamily: "'Khand',sans-serif",
-            transition: "all 0.18s",
-            boxShadow: disabled ? "none" : "0 2px 8px rgba(0,0,0,0.05)",
-          }}
-        >
-          {label}
-        </button>
-      ))}
-
+      <button
+        onClick={() => onChange(page - 1)}
+        disabled={page === 1}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 11,
+          border: `1.5px solid ${page === 1 ? "#F0F2F8" : "#E0E4F0"}`,
+          background: page === 1 ? "#F8F9FC" : "#fff",
+          color: page === 1 ? "#CBD5E1" : "#4B5168",
+          fontSize: 15,
+          fontWeight: 700,
+          cursor: page === 1 ? "not-allowed" : "pointer",
+          fontFamily: "'Khand',sans-serif",
+          transition: "all 0.18s",
+        }}
+      >
+        ←
+      </button>
       {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
         const isActive = p === page;
         const show = Math.abs(p - page) <= 2 || p === 1 || p === pages;
@@ -587,46 +566,33 @@ function Pagination({ page, total, perPage, onChange }) {
           </button>
         );
       })}
-
-      {[
-        {
-          label: "→",
-          disabled: page === pages,
-          onClick: () => onChange(page + 1),
-        },
-      ].map(({ label, disabled, onClick }) => (
-        <button
-          key={label}
-          onClick={onClick}
-          disabled={disabled}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 11,
-            border: `1.5px solid ${disabled ? "#F0F2F8" : "#E0E4F0"}`,
-            background: disabled ? "#F8F9FC" : "#fff",
-            color: disabled ? "#CBD5E1" : "#4B5168",
-            fontSize: 15,
-            fontWeight: 700,
-            cursor: disabled ? "not-allowed" : "pointer",
-            fontFamily: "'Khand',sans-serif",
-            transition: "all 0.18s",
-            boxShadow: disabled ? "none" : "0 2px 8px rgba(0,0,0,0.05)",
-          }}
-        >
-          {label}
-        </button>
-      ))}
+      <button
+        onClick={() => onChange(page + 1)}
+        disabled={page === pages}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 11,
+          border: `1.5px solid ${page === pages ? "#F0F2F8" : "#E0E4F0"}`,
+          background: page === pages ? "#F8F9FC" : "#fff",
+          color: page === pages ? "#CBD5E1" : "#4B5168",
+          fontSize: 15,
+          fontWeight: 700,
+          cursor: page === pages ? "not-allowed" : "pointer",
+          fontFamily: "'Khand',sans-serif",
+          transition: "all 0.18s",
+        }}
+      >
+        →
+      </button>
     </div>
   );
 }
 
-/* Animated counter hook */
 function useCounter(target, duration = 1800) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef(null);
-
   useEffect(() => {
     const obs = new IntersectionObserver(
       ([e]) => {
@@ -640,7 +606,6 @@ function useCounter(target, duration = 1800) {
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, [started]);
-
   useEffect(() => {
     if (!started) return;
     const start = performance.now();
@@ -652,13 +617,11 @@ function useCounter(target, duration = 1800) {
     };
     requestAnimationFrame(tick);
   }, [started, target, duration]);
-
   return [count, ref];
 }
 
 function StatItem({ number, suffix, label }) {
-  const num = parseInt(number);
-  const [count, ref] = useCounter(num);
+  const [count, ref] = useCounter(parseInt(number));
   return (
     <div ref={ref} className="hstat">
       <div className="hstat-n">
@@ -735,159 +698,130 @@ export default function Home() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,900;1,9..144,900&display=swap');
-
         *, *::before, *::after { box-sizing: border-box; }
         .home-root { font-family:'Outfit',system-ui,sans-serif; background:#EFF1F8; min-height:100vh; }
 
         /* ── HERO ── */
-        .hero-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;  /* ← overflow samo na bg wrapper */
-}
-.hero { position:relative; min-height:540px; display:flex; align-items:center; justify-content:center; padding:88px 0 80px; }
+        .hero-bg { position:absolute; inset:0; overflow:hidden; }
+        .hero { position:relative; min-height:520px; display:flex; align-items:center; justify-content:center; padding:88px 0 80px; }
         .hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 60%; transition:transform 8s ease-out; }
         .hero-img.visible { transform:scale(1.04); }
         .hero-dark { position:absolute; inset:0; background:linear-gradient(115deg,rgba(2,4,22,0.97) 0%,rgba(4,10,50,0.82) 35%,rgba(0,18,60,0.50) 62%,rgba(0,0,0,0.18) 100%); }
         .hero-noise { position:absolute; inset:0; opacity:0.03; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size:200px; }
         .hero-slice { position:absolute; bottom:-2px; left:0; right:0; background:#EFF1F8; clip-path:polygon(0 60%,100% 0%,100% 100%,0 100%); }
-        .hero-inner { position:relative; z-index:2; max-width:860px; margin:0 auto; padding:0 32px; width:100%; text-align:center; }
+        .hero-inner { position:relative; z-index:2; max-width:860px; margin:0 auto; padding:0 24px; width:100%; text-align:center; }
 
-        /* hero reveal animations */
         .h-fade { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
         .h-fade.vis { opacity:1; transform:translateY(0); }
-        .h-fade-1 { transition-delay:0.05s; }
-        .h-fade-2 { transition-delay:0.18s; }
-        .h-fade-3 { transition-delay:0.30s; }
-        .h-fade-4 { transition-delay:0.44s; }
+        .h-fade-1 { transition-delay:0.05s; } .h-fade-2 { transition-delay:0.18s; }
+        .h-fade-3 { transition-delay:0.30s; } .h-fade-4 { transition-delay:0.44s; }
         .h-fade-5 { transition-delay:0.56s; }
 
         .hero-eye { display:inline-flex; align-items:center; gap:10px; font-size:10px; font-weight:800; letter-spacing:0.20em; text-transform:uppercase; color:#F5C842; margin-bottom:16px; }
         .hero-eye::before, .hero-eye::after { content:''; width:24px; height:2px; background:linear-gradient(90deg,#F5C842,transparent); border-radius:1px; display:block; }
         .hero-eye::after { background:linear-gradient(90deg,transparent,#F5C842); }
 
-        .hero-h1 { font-family:'Khand',sans-serif; font-size:clamp(2.4rem,4.8vw,4.2rem); font-weight:700; color:#fff; line-height:1.04; letter-spacing:-0.01em; margin-bottom:14px; }
+        .hero-h1 { font-family:'Khand',sans-serif; font-size:clamp(2rem,5vw,4.2rem); font-weight:700; color:#fff; line-height:1.04; letter-spacing:-0.01em; margin-bottom:14px; }
         .hero-h1 em { font-style:italic; font-family:'Fraunces',serif; color:#F5C842; background:linear-gradient(135deg,#F5C842,#FFAD3B); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
         .hero-sub { font-size:15px; color:rgba(255,255,255,0.62); max-width:520px; line-height:1.78; font-weight:400; margin-bottom:32px; margin-left:auto; margin-right:auto; }
 
-        /* hero search */
+        /* ── SEARCH BAR ── */
         .hero-search { background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); border-radius:16px; display:flex; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.28),0 0 0 1px rgba(255,255,255,0.15); width:100%; max-width:700px; height:58px; margin:0 auto; border:1.5px solid rgba(255,255,255,0.2); }
-        .sf { flex:1; display:flex; align-items:center; gap:9px; padding:0 18px; border-right:1px solid #EEF0F8; min-width:0; }
+        .sf { flex:1; display:flex; align-items:center; gap:9px; padding:0 16px; border-right:1px solid #EEF0F8; min-width:0; }
         .sf-inner { flex:1; padding:10px 0; min-width:0; }
         .sf-lbl { font-size:9px; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:#A0ABBB; margin-bottom:3px; font-family:'Outfit',sans-serif; }
         .sf input, .sf select { border:none !important; outline:none !important; box-shadow:none !important; background:transparent; font-size:14px; font-weight:600; color:#0A0D1A; width:100%; font-family:'Outfit',sans-serif; padding:0; }
         .sf input::placeholder { color:#C8CEDE; font-weight:400; }
-        .sf.sm { flex:0 0 176px; }
-        .sgo { flex-shrink:0; padding:0 28px; background:linear-gradient(135deg,#0040FF,#1A56FF); color:#fff; border:none; cursor:pointer; font-family:'Khand',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.03em; transition:all 0.22s; display:flex; align-items:center; gap:7px; }
-        .sgo:hover { background:linear-gradient(135deg,#002CCB,#0040FF); }
+        .sf.sm { flex:0 0 170px; }
+        .sgo { flex-shrink:0; padding:0 24px; background:#0DB6A0; color:#fff; border:none; cursor:pointer; font-family:'Khand',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.03em; transition:background 0.22s; display:flex; align-items:center; gap:8px; border-radius:0 14px 14px 0; white-space:nowrap; }
+        .sgo:hover { background:#0aa390; }
 
-        /* hero stats */
-        .hero-stats { display:flex; gap:40px; margin-top:28px; justify-content:center; }
-        .hstat { }
+        .hero-stats { display:flex; gap:32px; margin-top:28px; justify-content:center; flex-wrap:wrap; }
         .hstat-n { font-family:'Khand',sans-serif; font-size:28px; font-weight:700; color:#F5C842; letter-spacing:-0.02em; line-height:1; }
         .hstat-l { font-size:11px; color:rgba(255,255,255,0.40); margin-top:3px; font-weight:500; letter-spacing:0.02em; }
 
         /* ── FILTER BAR ── */
-/* ── FILTER BAR ── */
-.fbar {
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(14px);
-  border: 1.5px solid #EAEDF5;
-  border-radius: 16px;
-  position: sticky;
-  top: 16px;
-  z-index: 50;
-  box-shadow: 0 8px 32px rgba(0,40,200,0.10), 0 2px 12px rgba(0,0,0,0.06);
-  margin: -32px 320px 0 440px;   /* ← povećaj bočne margine (bilo 24px) */
-}
-
-.fin {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px 20px;      /* ← smanji padding (bilo 13px 32px) */
-  max-width: 1240px;
-  margin: 0 auto;
-}
-        .chips { display:flex; gap:8px; }
-        .chip { display:inline-flex; align-items:center; gap:6px; padding:7px 18px; border-radius:100px; border:1.5px solid #E4E6EF; background:#fff; color:#4B5168; font-family:'Khand',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s cubic-bezier(.22,1,.36,1); white-space:nowrap; letter-spacing:0.01em; }
-        .chip:hover { border-color:#0040FF; color:#0040FF; background:#F0F4FF; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,64,255,0.10); }
+        .fbar { background:rgba(255,255,255,0.96); backdrop-filter:blur(14px); border:1.5px solid #EAEDF5; border-radius:16px; position:sticky; top:16px; z-index:50; box-shadow:0 8px 32px rgba(0,40,200,0.10), 0 2px 12px rgba(0,0,0,0.06); margin:-32px 24px 0; }
+        .fin { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 16px; flex-wrap:wrap; }
+        .chips { display:flex; gap:7px; flex-wrap:wrap; }
+        .chip { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:100px; border:1.5px solid #E4E6EF; background:#fff; color:#4B5168; font-family:'Khand',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s cubic-bezier(.22,1,.36,1); white-space:nowrap; letter-spacing:0.01em; }
+        .chip:hover { border-color:#0040FF; color:#0040FF; background:#F0F4FF; transform:translateY(-1px); }
         .chip.on { background:linear-gradient(135deg,#0040FF,#1A56FF); border-color:#0040FF; color:#fff; box-shadow:0 6px 18px rgba(0,64,255,0.28); transform:translateY(-1px); }
-        .sort-sel { padding:9px 16px; border:1.5px solid #E4E6EF; border-radius:11px; font-size:13px; font-weight:600; color:#4B5168; cursor:pointer; font-family:'Outfit',sans-serif; outline:none; background:#fff; transition:border-color 0.18s, box-shadow 0.18s; }
-        .sort-sel:hover { border-color:#0040FF; box-shadow:0 0 0 3px rgba(0,64,255,0.06); }
+        .sort-sel { padding:8px 14px; border:1.5px solid #E4E6EF; border-radius:11px; font-size:13px; font-weight:600; color:#4B5168; cursor:pointer; font-family:'Outfit',sans-serif; outline:none; background:#fff; transition:border-color 0.18s; flex-shrink:0; }
+        .sort-sel:hover { border-color:#0040FF; }
 
         /* ── RESULTS ── */
-        .results { padding:60px 0 100px; }
-        .res-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px; }
-        .res-title { font-family:'Khand',sans-serif; font-size:28px; font-weight:700; color:#0A0D1A; letter-spacing:-0.02em; }
-        .res-badge { font-size:12px; font-weight:800; color:#0040FF; background:linear-gradient(135deg,#EEF2FF,#E8EEFF); padding:5px 14px; border-radius:100px; margin-left:12px; font-family:'Outfit',sans-serif; border:1.5px solid #C7D2FE; }
+        .results { padding:48px 0 80px; }
+        .res-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:10px; }
+        .res-title { font-family:'Khand',sans-serif; font-size:26px; font-weight:700; color:#0A0D1A; letter-spacing:-0.02em; }
+        .res-badge { font-size:12px; font-weight:800; color:#0040FF; background:linear-gradient(135deg,#EEF2FF,#E8EEFF); padding:5px 14px; border-radius:100px; margin-left:10px; font-family:'Outfit',sans-serif; border:1.5px solid #C7D2FE; }
         .res-info { font-size:13px; color:#9CA3B8; font-weight:500; font-family:'Outfit',sans-serif; }
-        .cards-list { display:flex; flex-direction:column; gap:16px; }
+        .cards-list { display:flex; flex-direction:column; gap:14px; }
 
-        /* card appear animation */
-        @keyframes cardAppear {
-          from { opacity:0; transform:translateY(28px) scale(0.99); }
-          to   { opacity:1; transform:translateY(0) scale(1); }
-        }
+        @keyframes cardAppear { from { opacity:0; transform:translateY(24px) scale(0.99); } to { opacity:1; transform:translateY(0) scale(1); } }
         .ca { animation:cardAppear 0.5s cubic-bezier(.22,1,.36,1) both; }
 
-        /* ── LOADING ── */
-        .spin-wrap { text-align:center; padding:100px 0; }
+        .spin-wrap { text-align:center; padding:80px 0; }
         @keyframes sp { to { transform:rotate(360deg) } }
         .spin { width:46px; height:46px; border:3px solid #EEF2FF; border-top-color:#0040FF; border-radius:50%; animation:sp .8s linear infinite; margin:0 auto 16px; }
         .spin-wrap p { font-size:14px; color:#9CA3B8; font-family:'Outfit',sans-serif; }
 
-        /* ── SKELETON loading ── */
-        @keyframes shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
-        .skeleton { background:linear-gradient(90deg,#F0F2F8 25%,#E4E8F4 50%,#F0F2F8 75%); background-size:200% 100%; animation:shimmer 1.4s ease infinite; border-radius:8px; }
-
-        /* ── EMPTY ── */
-        .empty { text-align:center; padding:100px 32px; background:#fff; border-radius:24px; border:1.5px solid #EAEDF5; }
-        .empty h3 { font-family:'Khand',sans-serif; font-size:26px; font-weight:700; margin-bottom:10px; color:#0A0D1A; }
-        .empty p { color:#9CA3B8; font-size:14px; margin-bottom:28px; font-family:'Outfit',sans-serif; line-height:1.7; }
+        .empty { text-align:center; padding:80px 24px; background:#fff; border-radius:24px; border:1.5px solid #EAEDF5; }
+        .empty h3 { font-family:'Khand',sans-serif; font-size:24px; font-weight:700; margin-bottom:10px; color:#0A0D1A; }
+        .empty p { color:#9CA3B8; font-size:14px; margin-bottom:24px; font-family:'Outfit',sans-serif; line-height:1.7; }
         .rbtn { background:linear-gradient(135deg,#EEF2FF,#E8EEFF); color:#0040FF; border:1.5px solid #C7D2FE; padding:12px 28px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; font-family:'Khand',sans-serif; transition:all 0.2s; }
-        .rbtn:hover { background:linear-gradient(135deg,#E0E8FF,#D8E4FF); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,64,255,0.12); }
+        .rbtn:hover { background:linear-gradient(135deg,#E0E8FF,#D8E4FF); transform:translateY(-2px); }
 
         /* ── WHY SECTION ── */
-        .why { background:linear-gradient(160deg,#040915 0%,#050D22 60%,#071228 100%); padding:100px 0; position:relative; overflow:hidden; }
+        .why { background:linear-gradient(160deg,#040915 0%,#050D22 60%,#071228 100%); padding:80px 0; position:relative; overflow:hidden; }
         .why::before { content:''; position:absolute; top:-200px; right:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(0,64,255,0.07) 0%,transparent 70%); pointer-events:none; }
-        .why::after { content:''; position:absolute; bottom:-150px; left:-100px; width:400px; height:400px; background:radial-gradient(circle,rgba(245,200,66,0.04) 0%,transparent 70%); pointer-events:none; }
         .why-eye { display:inline-flex; align-items:center; gap:10px; font-size:10px; font-weight:800; letter-spacing:0.20em; text-transform:uppercase; color:#F5C842; margin-bottom:16px; font-family:'Outfit',sans-serif; }
         .why-eye::before { content:''; width:20px; height:2px; background:linear-gradient(90deg,#F5C842,transparent); border-radius:1px; }
-        .why-t { font-family:'Khand',sans-serif; font-size:clamp(2rem,3.5vw,3.2rem); font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1.05; margin-bottom:12px; }
-        .why-s { font-size:14px; color:rgba(255,255,255,0.32); margin-bottom:52px; max-width:420px; line-height:1.8; font-family:'Outfit',sans-serif; }
-        .why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
-
-        /* why cards */
-        .wc { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:22px; padding:30px 26px; transition:all 0.32s cubic-bezier(.22,1,.36,1); position:relative; overflow:hidden; }
-        .wc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#0040FF,#6366F1,#8B5CF6); transform:scaleX(0); transform-origin:left; transition:transform 0.38s ease; border-radius:2px; }
-        .wc::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(0,64,255,0.05) 0%,transparent 60%); opacity:0; transition:opacity 0.32s; }
+        .why-t { font-family:'Khand',sans-serif; font-size:clamp(1.8rem,3.5vw,3.2rem); font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1.05; margin-bottom:12px; }
+        .why-s { font-size:14px; color:rgba(255,255,255,0.32); margin-bottom:48px; max-width:420px; line-height:1.8; font-family:'Outfit',sans-serif; }
+        .why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+        .wc { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:22px; padding:28px 24px; transition:all 0.32s cubic-bezier(.22,1,.36,1); position:relative; overflow:hidden; }
+        .wc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#0040FF,#6366F1,#8B5CF6); transform:scaleX(0); transform-origin:left; transition:transform 0.38s ease; }
         .wc:hover { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.12); transform:translateY(-6px); box-shadow:0 24px 48px rgba(0,0,0,0.2); }
         .wc:hover::before { transform:scaleX(1); }
-        .wc:hover::after { opacity:1; }
-        .wi { width:52px; height:52px; border-radius:15px; background:rgba(0,64,255,0.12); display:flex; align-items:center; justify-content:center; font-size:23px; margin-bottom:20px; border:1px solid rgba(0,64,255,0.16); transition:transform 0.28s cubic-bezier(.34,1.56,.64,1); }
+        .wi { width:48px; height:48px; border-radius:14px; background:rgba(0,64,255,0.12); display:flex; align-items:center; justify-content:center; font-size:21px; margin-bottom:18px; border:1px solid rgba(0,64,255,0.16); transition:transform 0.28s cubic-bezier(.34,1.56,.64,1); }
         .wc:hover .wi { transform:scale(1.12) rotate(-4deg); }
-        .wc h3 { font-family:'Khand',sans-serif; font-size:19px; font-weight:700; color:#F1F5F9; margin-bottom:9px; }
+        .wc h3 { font-family:'Khand',sans-serif; font-size:18px; font-weight:700; color:#F1F5F9; margin-bottom:8px; }
         .wc p { font-size:13px; color:rgba(255,255,255,0.34); line-height:1.75; font-family:'Outfit',sans-serif; }
 
-        /* ── RESPONSIVE ── */
-        @media(max-width:860px) {
-          .hero-stats { gap:20px 30px; flex-wrap:wrap; }
-          .hero-search { flex-direction:column; height:auto; border-radius:16px; }
-          .sf { border-right:none; border-bottom:1px solid #EEF0F8; }
-          .sf.sm { flex:1; }
-          .sgo { padding:16px; justify-content:center; border-radius:0 0 14px 14px; }
+        /* ── CARD DESKTOP LAYOUT ── */
+        @media(min-width:640px) {
+          .card-img-wrap { width:260px !important; padding-top:0 !important; flex-shrink:0 !important; }
+          .card-link { flex-direction:row !important; }
+          .card-img-wrap img { position:relative !important; inset:unset !important; height:100% !important; }
         }
-        @media(max-width:700px) {
-          .fin { flex-direction:column; align-items:flex-start; gap:12px; }
-          .chips { flex-wrap:wrap; }
-          .hero { padding-bottom:56px; min-height:500px; }
+
+        /* ── MOBILE ── */
+        @media(max-width:639px) {
+          .hero { min-height:480px; padding:72px 0 64px; }
+          .hero-eye { font-size:9px; letter-spacing:0.14em; }
+          .hero-sub { font-size:13px; margin-bottom:24px; }
+          .hero-search { flex-direction:column; height:auto; border-radius:14px; }
+          .sf { border-right:none; border-bottom:1px solid #EEF0F8; padding:12px 16px; }
+          .sf.sm { flex:unset; width:100%; }
+          .sgo { padding:14px 16px; justify-content:center; border-radius:0 0 12px 12px; }
+          .hero-stats { gap:20px; }
+          .fbar { margin:-24px 12px 0; top:8px; }
+          .fin { padding:8px 12px; }
+          .chip { font-size:13px; padding:5px 12px; }
+          .results { padding:36px 0 60px; }
+          .why { padding:60px 0; }
+          .why-grid { grid-template-columns:1fr; }
+        }
+
+        @media(max-width:400px) {
+          .chips { gap:5px; }
+          .chip { font-size:12px; padding:5px 10px; }
+          .sort-sel { font-size:12px; padding:7px 10px; }
         }
       `}</style>
 
       <div className="home-root">
-        {/* ── HERO ── */}
         <section className="hero">
           <div className="hero-bg">
             <img
@@ -905,7 +839,6 @@ export default function Home() {
             >
               Više od 200 destinacija worldwide
             </div>
-
             <h1
               className={`hero-h1 h-fade h-fade-2 ${heroVisible ? "vis" : ""}`}
             >
@@ -913,7 +846,6 @@ export default function Home() {
               <br />
               po <em>najboljim cenama</em>
             </h1>
-
             <p
               className={`hero-sub h-fade h-fade-3 ${heroVisible ? "vis" : ""}`}
             >
@@ -921,12 +853,31 @@ export default function Home() {
               mestu.
             </p>
 
-            {/* Search bar */}
             <div
               className={`hero-search h-fade h-fade-4 ${heroVisible ? "vis" : ""}`}
             >
               <div className="sf">
-                <span style={{ fontSize: 15, opacity: 0.3 }}>📍</span>
+                <svg
+                  width="15"
+                  height="15"
+                  fill="none"
+                  viewBox="0 0 17 17"
+                  style={{ flexShrink: 0, opacity: 0.35 }}
+                >
+                  <path
+                    d="M8.5 2C6.015 2 4 4.015 4 6.5c0 3.375 4.5 8.5 4.5 8.5S13 9.875 13 6.5C13 4.015 10.985 2 8.5 2z"
+                    stroke="#0A0D1A"
+                    strokeWidth="1.4"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="8.5"
+                    cy="6.5"
+                    r="1.5"
+                    stroke="#0A0D1A"
+                    strokeWidth="1.3"
+                  />
+                </svg>
                 <div className="sf-inner">
                   <div className="sf-lbl">Destinacija</div>
                   <input
@@ -938,7 +889,30 @@ export default function Home() {
                 </div>
               </div>
               <div className="sf sm">
-                <span style={{ fontSize: 15, opacity: 0.3 }}>🗂</span>
+                <svg
+                  width="15"
+                  height="15"
+                  fill="none"
+                  viewBox="0 0 16 16"
+                  style={{ flexShrink: 0, opacity: 0.35 }}
+                >
+                  <rect
+                    x="2"
+                    y="3"
+                    width="12"
+                    height="11"
+                    rx="2.5"
+                    stroke="#0A0D1A"
+                    strokeWidth="1.3"
+                  />
+                  <path d="M2 7h12" stroke="#0A0D1A" strokeWidth="1.3" />
+                  <path
+                    d="M5 1.5v3M11 1.5v3"
+                    stroke="#0A0D1A"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                  />
+                </svg>
                 <div className="sf-inner">
                   <div className="sf-lbl">Kategorija</div>
                   <select
@@ -960,11 +934,25 @@ export default function Home() {
                   resultsRef.current?.scrollIntoView({ behavior: "smooth" })
                 }
               >
-                🔍 Pretraži
+                <svg width="15" height="15" fill="none" viewBox="0 0 15 15">
+                  <circle
+                    cx="6"
+                    cy="6"
+                    r="4.5"
+                    stroke="white"
+                    strokeWidth="1.6"
+                  />
+                  <path
+                    d="M11 11l2.8 2.8"
+                    stroke="white"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                Pretraži
               </button>
             </div>
 
-            {/* Animated stats */}
             <div
               className={`hero-stats h-fade h-fade-5 ${heroVisible ? "vis" : ""}`}
             >
@@ -975,7 +963,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── FILTER BAR ── */}
+        {/* Filter bar */}
         <div className="fbar">
           <div className="fin">
             <div className="chips">
@@ -1008,9 +996,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── RESULTS ── */}
+        {/* Results */}
         <section className="results" ref={resultsRef} id="results">
-          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 32px" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
             <div className="res-hdr">
               <div>
                 <span className="res-title">
@@ -1034,7 +1022,7 @@ export default function Home() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="empty">
-                <div style={{ fontSize: "3.5rem", marginBottom: 18 }}>🔍</div>
+                <div style={{ fontSize: "3rem", marginBottom: 16 }}>🔍</div>
                 <h3>Nema rezultata</h3>
                 <p>Pokušajte sa drugačijim filterima ili pretragom.</p>
                 <button
@@ -1075,9 +1063,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── WHY SECTION ── */}
+        {/* Why section */}
         <section className="why">
-          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 32px" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
             <div className="why-eye">Zašto Adriatica</div>
             <h2 className="why-t">
               Putujte bez brige,
