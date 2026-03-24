@@ -93,7 +93,7 @@ export default function AranžmanDetalji() {
 
   return (
     <div className="detalji-page">
-      {/* Hero */}
+      {/* ── HERO ── */}
       <div className="detalji-hero">
         <img src={img} alt={aranzman.naziv} className="detalji-hero-img" />
         <div className="detalji-hero-overlay" />
@@ -101,31 +101,33 @@ export default function AranžmanDetalji() {
           <Link to="/" className="back-link">
             ← Nazad na aranžmane
           </Link>
-          <p className="detalji-eyebrow">
+          <div className="detalji-eyebrow">
             {destinacija ? `${destinacija.naziv}, ${destinacija.zemlja}` : ""}
-          </p>
+          </div>
           <h1 className="detalji-title">{aranzman.naziv}</h1>
           <div className="detalji-hero-meta">
-            <span>✈ {aranzman.trajanje} dana</span>
-            <span>
+            <div className="meta-pill">✈ {aranzman.trajanje} dana</div>
+            <div className="meta-pill">
               📅 {new Date(aranzman.datumPolaska).toLocaleDateString("sr-RS")} –{" "}
               {new Date(aranzman.datumPovratka).toLocaleDateString("sr-RS")}
-            </span>
-            <span className="badge badge-gold">{aranzman.tip}</span>
+            </div>
+            <div className="meta-pill meta-pill-type">{aranzman.tip}</div>
           </div>
         </div>
       </div>
 
-      <div className="page-container detalji-body">
+      {/* ── BODY ── */}
+      <div className="detalji-body">
         <div className="detalji-grid">
-          {/* Left col */}
+          {/* ── LEFT COL ── */}
           <div className="detalji-main">
+            {/* Destinacija */}
             {destinacija && (
               <section className="detalji-section">
                 <h2 className="detalji-section-title">O destinaciji</h2>
                 <div className="dest-card">
                   <div className="dest-card-header">
-                    <span className="dest-flag">📍</span>
+                    <div className="dest-icon-wrap">📍</div>
                     <div>
                       <h3>{destinacija.naziv}</h3>
                       <p>{destinacija.zemlja}</p>
@@ -138,19 +140,28 @@ export default function AranžmanDetalji() {
               </section>
             )}
 
+            {/* Hotel */}
             {hotel && (
               <section className="detalji-section">
                 <h2 className="detalji-section-title">Smeštaj</h2>
                 <div className="hotel-card">
                   <div className="hotel-stars">
-                    {"★".repeat(parseInt(hotel.zvezdice) || 4)}
+                    {"★"
+                      .repeat(parseInt(hotel.zvezdice) || 4)
+                      .split("")
+                      .map((s, i) => (
+                        <span key={i} className="hotel-star">
+                          ★
+                        </span>
+                      ))}
                   </div>
                   <h3 className="hotel-name">{hotel.naziv}</h3>
-                  <p className="hotel-adresa">📍 {hotel.adresa}</p>
+                  <div className="hotel-adresa">📍 {hotel.adresa}</div>
                 </div>
               </section>
             )}
 
+            {/* Vodič */}
             {vodic && (
               <section className="detalji-section">
                 <h2 className="detalji-section-title">Turistički vodič</h2>
@@ -159,19 +170,19 @@ export default function AranžmanDetalji() {
                     {vodic.ime[0]}
                     {vodic.prezime[0]}
                   </div>
-                  <div>
+                  <div className="vodic-info">
                     <h3>
                       {vodic.ime} {vodic.prezime}
                     </h3>
-                    <p>🌐 Jezici: {vodic.jezici}</p>
-                    <p>✦ {vodic.specijalizacija}</p>
+                    <span className="vodic-tag">🌐 {vodic.jezici}</span>
+                    <span className="vodic-tag">✦ {vodic.specijalizacija}</span>
                   </div>
                 </div>
               </section>
             )}
           </div>
 
-          {/* Right col - booking widget */}
+          {/* ── RIGHT COL — BOOKING WIDGET ── */}
           <div className="detalji-sidebar">
             <div className="booking-widget">
               <p className="booking-eyebrow">Cena po osobi</p>

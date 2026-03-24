@@ -24,6 +24,8 @@ export default function Racuni() {
   const [filterStatus, setFilterStatus] = useState("SVE");
   const [showForm, setShowForm] = useState(false);
   const [toast, setToast] = useState(null);
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 8;
   const [stats, setStats] = useState({
     ukupno: 0,
     placeno: 0,
@@ -71,7 +73,6 @@ export default function Racuni() {
         setKlijenti(kMap);
         setAranzmani(aMap);
 
-        // Stats
         const placeno = racuniData
           .filter((r) => r.status === "PLACEN")
           .reduce((s, r) => s + (r.ukupno || 0), 0);
@@ -87,7 +88,6 @@ export default function Racuni() {
     load();
   }, []);
 
-  // Auto-calculate PDV and ukupno
   const handleIznos = (val) => {
     const iznos = parseFloat(val) || 0;
     const pdv = Math.round(iznos * 0.18);
@@ -113,7 +113,6 @@ export default function Racuni() {
       });
       showToast("✓ Račun uspešno kreiran!");
       setShowForm(false);
-      // Reload
       const rRes = await racunAPI.getAll();
       setRacuni(rRes.data || []);
     } catch (e) {
@@ -132,13 +131,16 @@ export default function Racuni() {
     (r) => filterStatus === "SVE" || r.status === filterStatus,
   );
 
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+
   return (
     <div className="racuni-page">
-      {/* Header */}
+      {/* ── HERO ── */}
       <div className="racuni-hero">
         <div className="page-container racuni-hero-inner">
           <div>
-            <h1 className="racuni-title">🧾 Računi</h1>
+            <div className="racuni-eyebrow">Finansije</div>
+            <h1 className="racuni-title">Računi</h1>
             <p className="racuni-sub">Pregled i upravljanje svim računima</p>
           </div>
           <button
@@ -150,32 +152,32 @@ export default function Racuni() {
         </div>
       </div>
 
-      <div className="page-container racuni-body">
-        {/* Stats cards */}
+      <div className="racuni-body">
+        {/* ── STATS ── */}
         <div className="racuni-stats">
           <div className="stat-card">
-            <span className="stat-icon">📄</span>
+            <div className="stat-icon-wrap">📄</div>
             <div>
               <strong>{stats.ukupno}</strong>
               <span>Ukupno računa</span>
             </div>
           </div>
           <div className="stat-card stat-card-green">
-            <span className="stat-icon">✅</span>
+            <div className="stat-icon-wrap">✅</div>
             <div>
               <strong>{stats.placeno.toLocaleString("sr-RS")} RSD</strong>
               <span>Naplaćeno</span>
             </div>
           </div>
           <div className="stat-card stat-card-blue">
-            <span className="stat-icon">⏳</span>
+            <div className="stat-icon-wrap">⏳</div>
             <div>
               <strong>{stats.ceka}</strong>
               <span>Čeka plaćanje</span>
             </div>
           </div>
           <div className="stat-card stat-card-red">
-            <span className="stat-icon">⚠️</span>
+            <div className="stat-icon-wrap">⚠️</div>
             <div>
               <strong>{stats.kasni}</strong>
               <span>Kasni</span>
@@ -183,7 +185,7 @@ export default function Racuni() {
           </div>
         </div>
 
-        {/* Form */}
+        {/* ── FORM ── */}
         {showForm && (
           <div className="racun-form-panel">
             <h3 className="form-panel-title">Novi račun</h3>
@@ -275,7 +277,7 @@ export default function Racuni() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Klijent ID</label>
+                  <label>Klijent</label>
                   <select
                     value={form.klijent}
                     onChange={(e) =>
@@ -323,20 +325,23 @@ export default function Racuni() {
           </div>
         )}
 
-        {/* Filter tabs */}
+        {/* ── FILTERS ── */}
         <div className="racuni-filters">
           {["SVE", "IZDAT", "PLACEN", "KASNI", "OTKAZAN"].map((s) => (
             <button
               key={s}
               className={`filter-chip ${filterStatus === s ? "active" : ""}`}
-              onClick={() => setFilterStatus(s)}
+              onClick={() => {
+                setFilterStatus(s);
+                setPage(1);
+              }}
             >
-              {s === "SVE" ? "Svi" : STATUS_CONFIG[s]?.label}
+              {s === "SVE" ? "🌐 Svi" : STATUS_CONFIG[s]?.label}
             </button>
           ))}
         </div>
 
-        {/* Table */}
+        {/* ── TABLE ── */}
         {loading ? (
           <div className="loading-state">
             <div className="loading-spinner" />
@@ -367,60 +372,71 @@ export default function Racuni() {
                       colSpan={11}
                       style={{
                         textAlign: "center",
-                        padding: "40px",
-                        color: "var(--ink-light)",
+                        padding: "48px",
+                        color: "#9CA3B8",
+                        fontFamily: "'Outfit',sans-serif",
+                        fontSize: 14,
                       }}
                     >
-                      Nema računa
+                      🔍 Nema računa za izabrani filter
                     </td>
                   </tr>
                 ) : (
-                  filtered.map((r) => {
-                    const k = klijenti[r.klijent_id];
-                    const a = aranzmani[r.aranzman_id];
-                    const st = STATUS_CONFIG[r.status] || {
-                      label: r.status,
-                      badge: "badge-blue",
-                    };
-                    return (
-                      <tr key={r.id}>
-                        <td>
-                          <strong className="racun-broj">{r.brojRacuna}</strong>
-                        </td>
-                        <td>
-                          {k ? `${k.ime} ${k.prezime}` : `#${r.klijent_id}`}
-                        </td>
-                        <td className="td-aranzman">
-                          {a ? a.naziv : `#${r.aranzman_id}`}
-                        </td>
-                        <td>{r.datumIzdavanja}</td>
-                        <td>{r.datumDospeca}</td>
-                        <td>{Number(r.iznos).toLocaleString("sr-RS")} RSD</td>
-                        <td>{Number(r.pdv).toLocaleString("sr-RS")} RSD</td>
-                        <td>
-                          <strong>
+                  filtered
+                    .slice((page - 1) * PER_PAGE, page * PER_PAGE)
+                    .map((r) => {
+                      const k =
+                        klijenti[r.klijent_1_id] || klijenti[r.klijent_id];
+                      const a =
+                        aranzmani[r.aranzman_4_id] || aranzmani[r.aranzman_id];
+                      const st = STATUS_CONFIG[r.status] || {
+                        label: r.status,
+                        badge: "badge-blue",
+                      };
+                      return (
+                        <tr key={r.id}>
+                          <td>
+                            <strong className="racun-broj">
+                              {r.brojRacuna}
+                            </strong>
+                          </td>
+                          <td>
+                            {k ? `${k.ime} ${k.prezime}` : `#${r.klijent_id}`}
+                          </td>
+                          <td className="td-aranzman">
+                            {a ? a.naziv : `#${r.aranzman_id}`}
+                          </td>
+                          <td>{r.datumIzdavanja}</td>
+                          <td>{r.datumDospeca}</td>
+                          <td>{Number(r.iznos).toLocaleString("sr-RS")} RSD</td>
+                          <td>{Number(r.pdv).toLocaleString("sr-RS")} RSD</td>
+                          <td className="td-amount">
                             {Number(r.ukupno).toLocaleString("sr-RS")} RSD
-                          </strong>
-                        </td>
-                        <td>
-                          {NACIN_ICONS[r.nacin_placanja]} {r.nacin_placanja}
-                        </td>
-                        <td>
-                          <span className={`badge ${st.badge}`}>
-                            {st.label}
-                          </span>
-                        </td>
-                        <td>
-                          <button
-                            className="btn-danger"
-                            onClick={() => handleDelete(r.id)}
-                          >
-                            Briši
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
+                          </td>
+                          <td>
+                            <div className="nacin-cell">
+                              <div className="nacin-icon">
+                                {NACIN_ICONS[r.nacin_placanja]}
+                              </div>
+                              <span>{r.nacin_placanja}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`badge ${st.badge}`}>
+                              {st.label}
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              className="btn-danger"
+                              onClick={() => handleDelete(r.id)}
+                            >
+                              Briši
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
                 )}
               </tbody>
               {filtered.length > 0 && (
@@ -440,6 +456,45 @@ export default function Racuni() {
                 </tfoot>
               )}
             </table>
+          </div>
+        )}
+
+        {/* ── PAGINATION ── */}
+        {filtered.length > PER_PAGE && (
+          <div className="pagination">
+            <button
+              className="pag-btn"
+              disabled={page === 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              ←
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
+              const show =
+                Math.abs(p - page) <= 2 || p === 1 || p === totalPages;
+              if (!show)
+                return p === page - 3 || p === page + 3 ? (
+                  <span key={p} className="pag-dots">
+                    …
+                  </span>
+                ) : null;
+              return (
+                <button
+                  key={p}
+                  className={`pag-btn ${p === page ? "active" : ""}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              );
+            })}
+            <button
+              className="pag-btn"
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              →
+            </button>
           </div>
         )}
       </div>

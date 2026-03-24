@@ -1,30 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,900;1,900&display=swap");
 
 :root {
-  --blue: #0071c2;
-  --blue-dark: #00487a;
-  --blue-light: #e8f3ff;
-  --blue-mid: #4b9fe1;
-  --teal: #008285;
-  --yellow: #f5a623;
-  --yellow-light: #fff3d6;
-  --green: #008009;
-  --green-light: #ebf7ec;
-  --red: #cc0000;
-  --red-light: #ffebeb;
-  --ink: #1a1a2e;
-  --ink-mid: #3d3d56;
-  --ink-light: #6b7280;
-  --border: #e5e7eb;
-  --bg: #f2f6fa;
+  --blue: #0040ff;
+  --blue-dark: #002ccb;
+  --blue-light: #eef2ff;
+  --ink: #0a0d1a;
+  --ink-mid: #3d4460;
+  --ink-light: #7b829e;
+  --border: #eceef6;
+  --bg: #f0f2f8;
   --white: #ffffff;
-  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.14);
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #f5c842;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow: 0 2px 12px rgba(10, 13, 26, 0.06);
+  --shadow-lg: 0 12px 48px rgba(10, 13, 26, 0.1);
 }
 
 * {
@@ -34,10 +26,9 @@
 }
 
 body {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Outfit", system-ui, sans-serif;
   background: var(--bg);
   color: var(--ink);
-  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,11 +40,11 @@ body {
   background: var(--blue);
   color: white;
   border: none;
-  padding: 13px 28px;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  padding: 12px 26px;
+  font-family: "Outfit", sans-serif;
   font-size: 14px;
   font-weight: 700;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
@@ -65,18 +56,18 @@ body {
 .btn-primary:hover {
   background: var(--blue-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 113, 194, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 64, 255, 0.3);
 }
 
 .btn-secondary {
   background: white;
   color: var(--blue);
-  border: 2px solid var(--blue);
-  padding: 11px 24px;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  border: 1.5px solid var(--blue);
+  padding: 10px 22px;
+  font-family: "Outfit", sans-serif;
   font-size: 14px;
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
@@ -89,13 +80,13 @@ body {
 }
 
 .btn-danger {
-  background: var(--red-light);
+  background: #fef2f2;
   color: var(--red);
-  border: 1px solid rgba(204, 0, 0, 0.2);
+  border: 1px solid #fecaca;
   padding: 7px 14px;
   font-size: 12px;
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -107,11 +98,11 @@ body {
 .btn-edit {
   background: var(--blue-light);
   color: var(--blue);
-  border: 1px solid rgba(0, 113, 194, 0.2);
+  border: 1px solid #c7d7ff;
   padding: 7px 14px;
   font-size: 12px;
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -126,8 +117,8 @@ textarea {
   width: 100%;
   padding: 11px 14px;
   border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  border-radius: var(--radius);
+  font-family: "Outfit", sans-serif;
   font-size: 14px;
   color: var(--ink);
   background: white;
@@ -140,11 +131,11 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(0, 113, 194, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 64, 255, 0.1);
 }
 label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--ink-mid);
   margin-bottom: 6px;
@@ -167,26 +158,26 @@ label {
   color: var(--blue);
 }
 .badge-green {
-  background: var(--green-light);
+  background: #dcfce7;
   color: var(--green);
 }
 .badge-yellow {
-  background: var(--yellow-light);
-  color: #b07d00;
+  background: #fffbeb;
+  color: #92400e;
 }
 .badge-red {
-  background: var(--red-light);
+  background: #fef2f2;
   color: var(--red);
 }
 .badge-teal {
-  background: #e0f5f5;
-  color: var(--teal);
+  background: #ccfbf1;
+  color: #0f766e;
 }
 
 .page-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 .loading-state {
@@ -213,8 +204,8 @@ label {
   text-align: center;
   padding: 32px;
   color: var(--red);
-  background: var(--red-light);
-  border-radius: var(--radius);
+  background: #fef2f2;
+  border-radius: var(--radius-lg);
 }
 
 .toast {
@@ -222,7 +213,7 @@ label {
   bottom: 28px;
   right: 28px;
   padding: 14px 22px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   font-size: 14px;
   font-weight: 600;
   z-index: 1000;

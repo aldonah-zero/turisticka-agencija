@@ -1,98 +1,207 @@
-.navbar {
+@import url("https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --sb-w: 240px;
+  --accent: #0040ff;
+  --accent-dk: #002ccb;
+  --gold: #f5c842;
+  --ink: #0a0d1a;
+  --ink-mid: #4b5168;
+  --ink-light: #9ca3b8;
+  --bg: #f0f2f8;
+  --white: #ffffff;
+  --border: #e4e6ef;
+  --radius: 12px;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sb-w);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sb-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-box {
+  width: 38px;
+  height: 38px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sb-brand {
+  font-family: "Khand", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.sb-brand em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.sb-tagline {
+  font-family: "Outfit", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-light);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.sb-nav {
+  flex: 1;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.sb-label {
+  font-family: "Outfit", sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+
+.sb-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-family: "Khand", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  text-decoration: none;
+  transition: all 0.18s;
+  position: relative;
+  margin-bottom: 2px;
+  letter-spacing: 0.01em;
+}
+
+.sb-link:hover {
+  background: #f4f5fb;
+  color: var(--ink);
+}
+
+.sb-link.active {
+  background: #eef2ff;
+  color: var(--accent);
+}
+
+.sb-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sb-dot {
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.sb-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.sb-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Outfit", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sb-uname {
+  font-family: "Khand", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.sb-urole {
+  font-family: "Outfit", sans-serif;
+  font-size: 10px;
+  color: var(--ink-light);
+  margin-top: 2px;
+}
+
+/* ── MOBILE ── */
+.mob-bar {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
-  background: var(--blue);
-  box-shadow: 0 2px 8px rgba(0, 71, 122, 0.3);
-  transition: all 0.3s;
-}
-
-.navbar-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 60px;
-  display: flex;
+  height: 56px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  z-index: 201;
+  padding: 0 18px;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
 }
 
-.navbar-logo {
+.mob-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
-  flex-shrink: 0;
-}
-
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 800;
-  color: white;
-  letter-spacing: -0.5px;
-}
-
-.logo-text span {
-  color: #ffd700;
-}
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-link {
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.nav-link:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.nav-link.active {
-  color: white;
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.nav-link-admin {
-  background: white;
-  color: var(--blue) !important;
-  border-color: white !important;
+  font-family: "Khand", sans-serif;
+  font-size: 22px;
   font-weight: 700;
+  color: var(--ink);
+}
+.mob-logo em {
+  font-style: normal;
+  color: var(--accent);
 }
 
-.nav-link-admin:hover {
-  background: var(--yellow) !important;
-  color: var(--ink) !important;
-  border-color: var(--yellow) !important;
-}
-
-.hamburger {
-  display: none;
+.mob-toggle {
+  display: flex;
   flex-direction: column;
   gap: 5px;
   background: none;
@@ -100,37 +209,36 @@
   cursor: pointer;
   padding: 4px;
 }
-
-.hamburger span {
+.mob-toggle span {
   display: block;
   width: 22px;
   height: 2px;
-  background: white;
+  background: var(--ink);
   border-radius: 2px;
   transition: all 0.3s;
 }
 
-@media (max-width: 640px) {
-  .hamburger {
+.sb-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 199;
+  backdrop-filter: blur(2px);
+}
+
+@media (max-width: 768px) {
+  .mob-bar {
     display: flex;
   }
-  .navbar-links {
-    display: none;
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background: var(--blue-dark);
-    flex-direction: column;
-    padding: 16px;
-    gap: 8px;
-    z-index: 99;
+  .sb-overlay {
+    display: block;
   }
-  .navbar-links.open {
-    display: flex;
+  .sidebar {
+    transform: translateX(-100%);
+    top: 56px;
   }
-  .nav-link {
-    width: 100%;
-    text-align: center;
+  .sidebar.open {
+    transform: translateX(0);
   }
 }

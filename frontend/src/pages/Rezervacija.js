@@ -86,10 +86,9 @@ export default function Rezervacija() {
   return (
     <div className="rez-page">
       <div className="rez-hero">
-        <div className="rez-hero-bg" />
         <div className="rez-hero-content">
-          <p className="section-subtitle">Online rezervacija</p>
-          <h1 className="section-title">
+          <div className="rez-eyebrow">Online rezervacija</div>
+          <h1>
             Rezervišite
             <br />
             <em>vaše putovanje</em>
@@ -97,7 +96,7 @@ export default function Rezervacija() {
         </div>
       </div>
 
-      <div className="page-container rez-body">
+      <div className="rez-body">
         {step < 3 ? (
           <div className="rez-layout">
             {/* Steps indicator */}
