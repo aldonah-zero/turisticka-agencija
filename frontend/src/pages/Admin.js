@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   aranžmanAPI,
   klijentAPI,
@@ -9,6 +10,8 @@ import {
   racunAPI,
 } from "../api";
 import "./Admin.css";
+
+const PER_PAGE = 10;
 
 const ENTITIES = [
   {
@@ -137,40 +140,37 @@ function EntityForm({ entity, initial, onSave, onCancel }) {
   const [form, setForm] = useState(() => {
     const def = {};
     entity.fields.forEach((f) => {
-      if (initial?.[f.name] !== undefined) {
-        def[f.name] = initial[f.name];
-      } else if (f.type === "select") {
-        def[f.name] = f.options[0];
-      } else {
-        def[f.name] = "";
-      }
+      if (initial?.[f.name] !== undefined) def[f.name] = initial[f.name];
+      else if (f.type === "select") def[f.name] = f.options[0];
+      else def[f.name] = "";
     });
     return def;
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const normalized = {};
+    const out = {};
     entity.fields.forEach((f) => {
-      const val = form[f.name];
-      if (f.type === "number") {
-        normalized[f.name] =
-          val === "" || val === null || val === undefined ? null : Number(val);
-      } else if (f.type === "date" && val) {
-        const d = new Date(val);
-        normalized[f.name] = d.toISOString().split("T")[0];
-      } else {
-        normalized[f.name] = val === "" ? null : val;
-      }
+      const v = form[f.name];
+      if (f.type === "number")
+        out[f.name] = v === "" || v == null ? null : Number(v);
+      else if (f.type === "date" && v)
+        out[f.name] = new Date(v).toISOString().split("T")[0];
+      else out[f.name] = v === "" ? null : v;
     });
-    onSave(normalized);
+    onSave(out);
   };
 
   return (
     <form onSubmit={handleSubmit} className="entity-form">
-      <h3 className="entity-form-title">
-        {initial ? "Uredi" : "Novi"} {entity.label.slice(0, -1)}
-      </h3>
+      <div className="entity-form-header">
+        <h3 className="entity-form-title">
+          {initial ? "✏️ Uredi" : "➕ Novi"} {entity.label.slice(0, -1)}
+        </h3>
+        <button type="button" className="form-close-btn" onClick={onCancel}>
+          ✕
+        </button>
+      </div>
       <div className="entity-form-grid">
         {entity.fields.map((f) => (
           <div key={f.name} className="form-group">
@@ -203,7 +203,7 @@ function EntityForm({ entity, initial, onSave, onCancel }) {
       </div>
       <div className="form-actions">
         <button type="submit" className="btn-primary">
-          Sačuvaj
+          💾 Sačuvaj
         </button>
         <button type="button" className="btn-secondary" onClick={onCancel}>
           Otkaži
@@ -213,38 +213,91 @@ function EntityForm({ entity, initial, onSave, onCancel }) {
   );
 }
 
-function EntityTable({ entity, data, onEdit, onDelete }) {
+function Pagination({ page, total, perPage, onChange }) {
+  const pages = Math.ceil(total / perPage);
+  if (pages <= 1) return null;
+  return (
+    <div className="admin-pagination">
+      <button
+        className="pg-btn"
+        disabled={page === 1}
+        onClick={() => onChange(page - 1)}
+      >
+        ←
+      </button>
+      {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
+        const show = Math.abs(p - page) <= 2 || p === 1 || p === pages;
+        if (!show)
+          return p === page - 3 || p === page + 3 ? (
+            <span key={p} className="pg-dots">
+              …
+            </span>
+          ) : null;
+        return (
+          <button
+            key={p}
+            className={`pg-btn ${p === page ? "active" : ""}`}
+            onClick={() => onChange(p)}
+          >
+            {p}
+          </button>
+        );
+      })}
+      <button
+        className="pg-btn"
+        disabled={page === pages}
+        onClick={() => onChange(page + 1)}
+      >
+        →
+      </button>
+      <span className="pg-info">
+        {total} zapisa · str. {page}/{pages}
+      </span>
+    </div>
+  );
+}
+
+function EntityTable({ entity, data, onEdit, onDelete, page, onPageChange }) {
+  const cols = entity.fields.slice(0, 4);
+  const paginated = data.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
   if (!data.length)
     return (
-      <div className="empty-state" style={{ padding: "40px 0" }}>
-        <p className="empty-icon">✦</p>
-        <p>Nema podataka</p>
+      <div className="admin-empty">
+        <div className="admin-empty-icon">{entity.icon}</div>
+        <h3>Nema podataka</h3>
+        <p>Dodajte prvi zapis klikom na dugme iznad.</p>
       </div>
     );
-
-  const cols = entity.fields.slice(0, 4);
 
   return (
     <div className="table-wrap">
       <table className="admin-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th style={{ width: 60 }}>ID</th>
             {cols.map((f) => (
               <th key={f.name}>{f.label}</th>
             ))}
-            <th>Akcije</th>
+            <th style={{ width: 140 }}>Akcije</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
+          {paginated.map((row) => (
             <tr key={row.id}>
               <td className="id-cell">#{row.id}</td>
               {cols.map((f) => (
                 <td key={f.name}>
                   {f.type === "select" ? (
                     <span
-                      className={`badge ${row[f.name] === "POTVRDJENO" ? "badge-sage" : row[f.name] === "OTKAZANO" ? "badge-terra" : "badge-gold"}`}
+                      className={`abadge ${
+                        row[f.name] === "POTVRDJENO" || row[f.name] === "PLACEN"
+                          ? "abadge-green"
+                          : row[f.name] === "OTKAZANO" ||
+                              row[f.name] === "KASNI"
+                            ? "abadge-red"
+                            : "abadge-blue"
+                      }`}
                     >
                       {row[f.name]}
                     </span>
@@ -265,34 +318,57 @@ function EntityTable({ entity, data, onEdit, onDelete }) {
           ))}
         </tbody>
       </table>
+      <div className="table-footer">
+        <Pagination
+          page={page}
+          total={data.length}
+          perPage={PER_PAGE}
+          onChange={onPageChange}
+        />
+      </div>
     </div>
   );
 }
 
 export default function Admin() {
-  const [activeEntity, setActiveEntity] = useState(ENTITIES[0]);
+  const [activeKey, setActiveKey] = useState("aranzman");
+  const [counts, setCounts] = useState({});
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editRow, setEditRow] = useState(null);
   const [toast, setToast] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const entity = ENTITIES.find((e) => e.key === activeKey);
 
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
   };
 
+  // Load counts for all entities on mount
+  useEffect(() => {
+    ENTITIES.forEach(async (e) => {
+      try {
+        const res = await e.api.getAll();
+        setCounts((prev) => ({ ...prev, [e.key]: (res.data || []).length }));
+      } catch {}
+    });
+  }, []);
+
   const loadData = useCallback(async () => {
     setLoading(true);
+    setPage(1);
     try {
-      const res = await activeEntity.api.getAll();
+      const res = await entity.api.getAll();
       setData(res.data || []);
     } catch {
       showToast("Greška pri učitavanju.", "error");
     } finally {
       setLoading(false);
     }
-  }, [activeEntity]);
+  }, [entity]);
 
   useEffect(() => {
     setData([]);
@@ -304,10 +380,10 @@ export default function Admin() {
   const handleSave = async (form) => {
     try {
       if (editRow) {
-        await activeEntity.api.update(editRow.id, form);
+        await entity.api.update(editRow.id, form);
         showToast("✓ Uspešno ažurirano!");
       } else {
-        await activeEntity.api.create(form);
+        await entity.api.create(form);
         showToast("✓ Uspešno kreirano!");
       }
       setShowForm(false);
@@ -321,7 +397,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     if (!window.confirm("Da li ste sigurni?")) return;
     try {
-      await activeEntity.api.delete(id);
+      await entity.api.delete(id);
       showToast("✓ Obrisano.");
       loadData();
     } catch {
@@ -331,32 +407,43 @@ export default function Admin() {
 
   return (
     <div className="admin-page">
+      {/* Sidebar */}
       <div className="admin-sidebar">
         <div className="admin-sidebar-header">
+          <Link to="/" className="admin-back-btn">
+            ← Nazad na sajt
+          </Link>
           <p className="admin-sidebar-label">Admin Panel</p>
         </div>
         {ENTITIES.map((e) => (
           <button
             key={e.key}
-            className={`sidebar-item ${activeEntity.key === e.key ? "active" : ""}`}
-            onClick={() => setActiveEntity(e)}
+            className={`sidebar-item ${activeKey === e.key ? "active" : ""}`}
+            onClick={() => setActiveKey(e.key)}
           >
             <span className="sidebar-icon">{e.icon}</span>
             <span>{e.label}</span>
-            {activeEntity.key === e.key && data.length > 0 && (
-              <span className="sidebar-count">{data.length}</span>
+            {counts[e.key] > 0 && (
+              <span
+                className={`sidebar-count ${activeKey === e.key ? "active" : ""}`}
+              >
+                {counts[e.key]}
+              </span>
             )}
           </button>
         ))}
       </div>
 
+      {/* Main */}
       <div className="admin-main">
+        {/* Header */}
         <div className="admin-header">
-          <div>
-            <h1 className="admin-title">
-              {activeEntity.icon} {activeEntity.label}
-            </h1>
-            <p className="admin-subtitle">{data.length} zapisa</p>
+          <div className="admin-header-left">
+            <div className="admin-entity-icon">{entity.icon}</div>
+            <div>
+              <h1 className="admin-title">{entity.label}</h1>
+              <p className="admin-subtitle">{data.length} zapisa u bazi</p>
+            </div>
           </div>
           <button
             className="btn-primary"
@@ -369,10 +456,28 @@ export default function Admin() {
           </button>
         </div>
 
+        {/* Entity cards quick nav */}
+        <div className="entity-cards">
+          {ENTITIES.map((e) => (
+            <button
+              key={e.key}
+              className={`entity-card ${activeKey === e.key ? "active" : ""}`}
+              onClick={() => setActiveKey(e.key)}
+            >
+              <span className="ec-icon">{e.icon}</span>
+              <span className="ec-label">{e.label}</span>
+              {counts[e.key] > 0 && (
+                <span className="ec-count">{counts[e.key]}</span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Form */}
         {showForm && (
           <div className="form-panel">
             <EntityForm
-              entity={activeEntity}
+              entity={entity}
               initial={editRow}
               onSave={handleSave}
               onCancel={() => {
@@ -383,6 +488,7 @@ export default function Admin() {
           </div>
         )}
 
+        {/* Table */}
         {loading ? (
           <div className="loading-state">
             <div className="loading-spinner" />
@@ -390,13 +496,15 @@ export default function Admin() {
           </div>
         ) : (
           <EntityTable
-            entity={activeEntity}
+            entity={entity}
             data={data}
             onEdit={(row) => {
               setEditRow(row);
               setShowForm(true);
             }}
             onDelete={handleDelete}
+            page={page}
+            onPageChange={setPage}
           />
         )}
       </div>
