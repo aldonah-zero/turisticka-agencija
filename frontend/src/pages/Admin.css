@@ -155,31 +155,34 @@
   color: #7b829e;
 }
 
-/* ── ENTITY CARDS ── */
+/* ── ENTITY CARDS — always scrollable, never hidden ── */
 .entity-cards {
   display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 20px;
   overflow-x: auto;
-  flex-wrap: nowrap; /* 👈 KEY */
+  flex-wrap: nowrap;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px; /* prevents shadow clipping */
 }
-
 .entity-cards::-webkit-scrollbar {
   display: none;
 }
+
 .entity-card {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 14px;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: 12px;
   background: #fff;
   border: 1.5px solid #eceef6;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   font-family: "Outfit", sans-serif;
+  flex-shrink: 0; /* KEY: prevents cards from shrinking */
 }
 .entity-card:hover {
   border-color: #0040ff;
@@ -193,10 +196,10 @@
   transform: translateY(-2px);
 }
 .ec-icon {
-  font-size: 16px;
+  font-size: 15px;
 }
 .ec-label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #3d4460;
   white-space: nowrap;
@@ -205,12 +208,13 @@
   color: #fff;
 }
 .ec-count {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   color: #0040ff;
   background: #eef2ff;
-  padding: 2px 7px;
+  padding: 2px 6px;
   border-radius: 20px;
+  flex-shrink: 0;
 }
 .entity-card.active .ec-count {
   background: rgba(255, 255, 255, 0.2);
@@ -614,7 +618,7 @@
 
 /* ── RESPONSIVE ── */
 
-/* Tablet: sidebar becomes horizontal scrollable tab bar */
+/* Tablet: sidebar collapses to horizontal scrollable tab bar */
 @media (max-width: 960px) {
   .admin-page {
     flex-direction: column;
@@ -638,7 +642,6 @@
   .admin-sidebar::-webkit-scrollbar {
     display: none;
   }
-
   .admin-sidebar-header {
     display: none;
   }
@@ -669,7 +672,7 @@
 /* Mobile */
 @media (max-width: 600px) {
   .admin-main {
-    padding: 16px 14px 60px;
+    padding: 14px 12px 60px;
   }
 
   .admin-header {
@@ -681,26 +684,32 @@
     width: 100%;
     justify-content: center;
   }
-
   .admin-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
+  /* Entity cards: smaller but still visible and scrollable — NEVER hidden */
   .entity-cards {
-    gap: 7px;
+    gap: 6px;
+    margin-bottom: 16px;
   }
   .entity-card {
-    padding: 8px 12px;
+    padding: 7px 11px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+  .ec-icon {
+    font-size: 14px;
   }
   .ec-label {
-    font-size: 12px;
+    font-size: 11px;
   }
   .ec-count {
     display: none;
-  }
+  } /* hide count badge only, keep the card */
 
   .entity-form {
-    padding: 18px 16px 16px;
+    padding: 16px 14px 14px;
   }
   .entity-form-grid {
     grid-template-columns: 1fr;
@@ -716,27 +725,32 @@
   }
 
   .admin-empty {
-    padding: 52px 20px;
+    padding: 48px 16px;
   }
 
   .toast {
     bottom: 16px;
-    right: 14px;
-    left: 14px;
+    right: 12px;
+    left: 12px;
   }
-
   .pg-info {
     display: none;
   }
 }
 
-/* Very small screens: hide entity cards, rely on tab bar */
+/* Very small — cards still show, just a bit tighter */
 @media (max-width: 400px) {
-  .entity-cards {
-    display: none;
+  .entity-card {
+    padding: 6px 10px;
+  }
+  .ec-label {
+    font-size: 10px;
+  }
+  .ec-icon {
+    font-size: 13px;
   }
   .sidebar-item {
-    padding: 12px 12px;
+    padding: 12px 11px;
     font-size: 12px;
   }
 }

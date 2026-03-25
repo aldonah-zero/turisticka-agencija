@@ -436,6 +436,7 @@ function Card({ a, dest, index }) {
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 14,
+                  marginTop: 12,
                   fontWeight: 800,
                   color: "#fff",
                   fontFamily: "'Khand',sans-serif",
