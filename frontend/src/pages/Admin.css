@@ -160,7 +160,13 @@
   display: flex;
   gap: 10px;
   margin-bottom: 24px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  flex-wrap: nowrap; /* 👈 KEY */
+  -webkit-overflow-scrolling: touch;
+}
+
+.entity-cards::-webkit-scrollbar {
+  display: none;
 }
 .entity-card {
   display: flex;

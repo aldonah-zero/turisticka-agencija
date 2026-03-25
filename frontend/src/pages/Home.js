@@ -80,7 +80,7 @@ function Card({ a, dest, index }) {
       to={`/aranzman/${a.id}`}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      className="card-link"
+      className={`card-link ${hov ? "card-hov" : ""}`}
       style={{
         display: "flex",
         textDecoration: "none",
@@ -100,7 +100,9 @@ function Card({ a, dest, index }) {
         animationDelay: `${index * 0.07}s`,
       }}
     >
+      {/* Image — className allows CSS override on mobile */}
       <div
+        className="card-img"
         style={{
           position: "relative",
           width: 280,
@@ -129,6 +131,8 @@ function Card({ a, dest, index }) {
               "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 40%, rgba(0,0,0,0.65) 100%)",
           }}
         />
+
+        {/* Tip chip */}
         <div
           style={{
             position: "absolute",
@@ -154,6 +158,8 @@ function Card({ a, dest, index }) {
           <span style={{ fontSize: 12 }}>{tip.icon}</span>
           {tip.label}
         </div>
+
+        {/* Wishlist */}
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -184,6 +190,8 @@ function Card({ a, dest, index }) {
         >
           {fav ? "♥" : "♡"}
         </button>
+
+        {/* Save badge */}
         <div
           style={{
             position: "absolute",
@@ -203,6 +211,8 @@ function Card({ a, dest, index }) {
         >
           -{save}%
         </div>
+
+        {/* Duration */}
         <div
           style={{
             position: "absolute",
@@ -223,7 +233,9 @@ function Card({ a, dest, index }) {
         </div>
       </div>
 
+      {/* Body */}
       <div
+        className="card-body"
         style={{
           flex: 1,
           padding: "24px 28px",
@@ -234,6 +246,7 @@ function Card({ a, dest, index }) {
         }}
       >
         <div>
+          {/* Location */}
           <div
             style={{
               fontSize: 10,
@@ -264,6 +277,8 @@ function Card({ a, dest, index }) {
             </span>
             {dest ? `${dest.naziv}, ${dest.zemlja}` : "—"}
           </div>
+
+          {/* Title */}
           <h3
             style={{
               fontFamily: "'Khand',sans-serif",
@@ -279,6 +294,8 @@ function Card({ a, dest, index }) {
           >
             {a.naziv}
           </h3>
+
+          {/* Tags */}
           <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
             {[
               {
@@ -315,7 +332,9 @@ function Card({ a, dest, index }) {
           </div>
         </div>
 
+        {/* Footer */}
         <div
+          className="card-footer-row"
           style={{
             display: "flex",
             alignItems: "flex-end",
@@ -327,6 +346,7 @@ function Card({ a, dest, index }) {
             flexWrap: "wrap",
           }}
         >
+          {/* Price */}
           <div>
             <span
               style={{
@@ -391,7 +411,10 @@ function Card({ a, dest, index }) {
               UKLJ. SVI POREZI
             </div>
           </div>
+
+          {/* Score + CTA */}
           <div
+            className="card-cta-row"
             style={{
               display: "flex",
               alignItems: "center",
@@ -693,7 +716,7 @@ export default function Home() {
         *, *::before, *::after { box-sizing: border-box; }
         .home-root { font-family:'Outfit',system-ui,sans-serif; background:#EFF1F8; min-height:100vh; }
 
-        /* HERO */
+        /* ── HERO ── */
         .hero-bg { position:absolute; inset:0; overflow:hidden; }
         .hero { position:relative; min-height:520px; display:flex; align-items:center; justify-content:center; padding:88px 0 80px; }
         .hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 60%; transition:transform 8s ease-out; }
@@ -717,7 +740,7 @@ export default function Home() {
         .hero-h1 em { font-style:italic; font-family:'Fraunces',serif; color:#F5C842; background:linear-gradient(135deg,#F5C842,#FFAD3B); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
         .hero-sub { font-size:15px; color:rgba(255,255,255,0.62); max-width:520px; line-height:1.78; font-weight:400; margin-bottom:32px; margin-left:auto; margin-right:auto; }
 
-        /* SEARCH */
+        /* ── SEARCH ── */
         .hero-search { background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); border-radius:16px; display:flex; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.28),0 0 0 1px rgba(255,255,255,0.15); width:100%; max-width:700px; height:58px; margin:0 auto; border:1.5px solid rgba(255,255,255,0.2); }
         .sf { flex:1; display:flex; align-items:center; gap:9px; padding:0 18px; border-right:1px solid #EEF0F8; min-width:0; }
         .sf-inner { flex:1; padding:10px 0; min-width:0; }
@@ -732,28 +755,9 @@ export default function Home() {
         .hstat-n { font-family:'Khand',sans-serif; font-size:28px; font-weight:700; color:#F5C842; letter-spacing:-0.02em; line-height:1; }
         .hstat-l { font-size:11px; color:rgba(255,255,255,0.40); margin-top:3px; font-weight:500; letter-spacing:0.02em; }
 
-        /* ── FILTER BAR ──
-           KEY FIX: centered wrapper with negative margin to overlap hero bottom.
-           No sidebar-aware asymmetric margins. Works at any viewport width. */
-        .fbar-outer {
-          display: flex;
-          justify-content: center;
-          padding: 0 32px;
-          margin-top: -28px;
-          position: relative;
-          z-index: 50;
-        }
-        .fbar {
-          background: rgba(255,255,255,0.97);
-          backdrop-filter: blur(14px);
-          border: 1.5px solid #EAEDF5;
-          border-radius: 16px;
-          position: sticky;
-          top: 16px;
-          box-shadow: 0 8px 32px rgba(0,40,200,0.10), 0 2px 12px rgba(0,0,0,0.06);
-          width: 100%;
-          max-width: 960px;
-        }
+        /* ── FILTER BAR ── */
+        .fbar-outer { display:flex; justify-content:center; padding:0 32px; margin-top:-28px; position:relative; z-index:50; }
+        .fbar { background:rgba(255,255,255,0.97); backdrop-filter:blur(14px); border:1.5px solid #EAEDF5; border-radius:16px; position:sticky; top:16px; box-shadow:0 8px 32px rgba(0,40,200,0.10), 0 2px 12px rgba(0,0,0,0.06); width:100%; max-width:960px; }
         .fin { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 20px; flex-wrap:wrap; }
         .chips { display:flex; gap:8px; flex-wrap:wrap; }
         .chip { display:inline-flex; align-items:center; gap:6px; padding:7px 18px; border-radius:100px; border:1.5px solid #E4E6EF; background:#fff; color:#4B5168; font-family:'Khand',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s cubic-bezier(.22,1,.36,1); white-space:nowrap; letter-spacing:0.01em; }
@@ -762,7 +766,7 @@ export default function Home() {
         .sort-sel { padding:9px 16px; border:1.5px solid #E4E6EF; border-radius:11px; font-size:13px; font-weight:600; color:#4B5168; cursor:pointer; font-family:'Outfit',sans-serif; outline:none; background:#fff; transition:border-color 0.18s,box-shadow 0.18s; flex-shrink:0; }
         .sort-sel:hover { border-color:#0040FF; box-shadow:0 0 0 3px rgba(0,64,255,0.06); }
 
-        /* RESULTS */
+        /* ── RESULTS ── */
         .results { padding:56px 0 100px; }
         .res-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px; }
         .res-title { font-family:'Khand',sans-serif; font-size:28px; font-weight:700; color:#0A0D1A; letter-spacing:-0.02em; }
@@ -784,7 +788,7 @@ export default function Home() {
         .rbtn { background:linear-gradient(135deg,#EEF2FF,#E8EEFF); color:#0040FF; border:1.5px solid #C7D2FE; padding:12px 28px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; font-family:'Khand',sans-serif; transition:all 0.2s; }
         .rbtn:hover { background:linear-gradient(135deg,#E0E8FF,#D8E4FF); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,64,255,0.12); }
 
-        /* WHY */
+        /* ── WHY ── */
         .why { background:linear-gradient(160deg,#040915 0%,#050D22 60%,#071228 100%); padding:100px 0; position:relative; overflow:hidden; }
         .why::before { content:''; position:absolute; top:-200px; right:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(0,64,255,0.07) 0%,transparent 70%); pointer-events:none; }
         .why-eye { display:inline-flex; align-items:center; gap:10px; font-size:10px; font-weight:800; letter-spacing:0.20em; text-transform:uppercase; color:#F5C842; margin-bottom:16px; font-family:'Outfit',sans-serif; }
@@ -801,8 +805,9 @@ export default function Home() {
         .wc h3 { font-family:'Khand',sans-serif; font-size:19px; font-weight:700; color:#F1F5F9; margin-bottom:9px; }
         .wc p { font-size:13px; color:rgba(255,255,255,0.34); line-height:1.75; font-family:'Outfit',sans-serif; }
 
-        /* MOBILE */
+        /* ── MOBILE ── */
         @media(max-width:640px) {
+          /* Hero */
           .hero { min-height:460px; padding:72px 0 60px; }
           .hero-sub { font-size:13px; margin-bottom:22px; }
           .hero-search { flex-direction:column; height:auto; border-radius:14px; }
@@ -810,17 +815,51 @@ export default function Home() {
           .sf.sm { flex:unset; width:100%; }
           .sgo { padding:14px 16px; justify-content:center; border-radius:0 0 12px 12px; }
           .hero-stats { gap:20px; }
+
+          /* Filter bar */
           .fbar-outer { padding:0 12px; margin-top:-16px; }
           .fin { flex-direction:column; align-items:flex-start; gap:10px; padding:10px 14px; }
           .chips { gap:6px; }
           .chip { font-size:13px; padding:5px 12px; }
           .sort-sel { width:100%; }
-          .results { padding:36px 0 60px; }
+
+          /* Results */
+          .results { padding:32px 0 60px; }
+
+          /* ── CARD MOBILE FIX ── */
+          .card-link {
+            flex-direction: column !important;
+          }
+          .card-img {
+            width: 100% !important;
+            height: 200px !important;
+            flex-shrink: unset !important;
+          }
+          .card-img img {
+            height: 200px;
+          }
+          .card-body {
+            padding: 18px 18px 20px !important;
+          }
+          .card-footer-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+          }
+          .card-cta-row {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          /* Why */
           .why { padding:60px 0; }
           .why-grid { grid-template-columns:1fr; }
         }
+
         @media(max-width:400px) {
           .chip { font-size:12px; padding:5px 10px; }
+          .card-img { height: 180px !important; }
+          .card-img img { height: 180px; }
         }
       `}</style>
 
@@ -856,6 +895,7 @@ export default function Home() {
               Letovanja, city breakovi, zimovanja i krstarenja — sve na jednom
               mestu.
             </p>
+
             <div
               className={`hero-search h-fade h-fade-4 ${heroVisible ? "vis" : ""}`}
             >
@@ -955,6 +995,7 @@ export default function Home() {
                 Pretraži
               </button>
             </div>
+
             <div
               className={`hero-stats h-fade h-fade-5 ${heroVisible ? "vis" : ""}`}
             >
@@ -965,7 +1006,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FILTER BAR — centered, no sidebar margins */}
+        {/* FILTER BAR */}
         <div className="fbar-outer">
           <div className="fbar">
             <div className="fin">
@@ -1002,7 +1043,7 @@ export default function Home() {
 
         {/* RESULTS */}
         <section className="results" ref={resultsRef} id="results">
-          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 32px" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 16px" }}>
             <div className="res-hdr">
               <div>
                 <span className="res-title">
@@ -1018,6 +1059,7 @@ export default function Home() {
                 </div>
               )}
             </div>
+
             {loading ? (
               <div className="spin-wrap">
                 <div className="spin" />
@@ -1068,7 +1110,7 @@ export default function Home() {
 
         {/* WHY */}
         <section className="why">
-          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 32px" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
             <div className="why-eye">Zašto Adriatica</div>
             <h2 className="why-t">
               Putujte bez brige,
